@@ -1,0 +1,32 @@
+*{
+box-sizing: border-box;
+margin: 0;
+scroll-behavior: smooth;
+font-family: 'Palanquin';
+}
+
+header{
+color: whitesmoke;
+display: flex;
+justify-content: space-around;
+align-items: center;
+background-color: rgb(189, 56, 56);
+height:100px;
+}
+
+#input{
+width: 200px;
+border: none;
+border-radius: 15px;
+padding: 10px 8px 0px 8px;
+}
+
+#main_div{
+display: flex;
+justify-content: center;
+margin: auto;
+max-width: 1920px;
+height: 100vh;
+border: 12px solid black;
+background-color: rgb(212, 83, 83);
+}
