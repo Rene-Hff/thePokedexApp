@@ -22,11 +22,26 @@ padding: 10px 8px 0px 8px;
 }
 
 #main_div{
+color: rgb(0, 0, 0);
 display: flex;
-justify-content: center;
 margin: auto;
 max-width: 1920px;
 height: 100vh;
 border: 12px solid black;
 background-color: rgb(212, 83, 83);
+}
+
+#pokemonlist{
+padding: 24px;
+display: flex;
+flex-wrap: wrap;
+justify-content: space-evenly;
+}
+
+.template_box{
+border-radius: 12px;
+padding: 8px;
+background-color: rgb(255, 255, 255);
+height: 100px;
+margin: 2px;
 }
