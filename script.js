@@ -1,10 +1,10 @@
 const POKE_API_URL = "https://pokeapi.co/api/v2/pokemon" // get name and url
 const dataArray = []; // only url 
 const detailsDataArray = []; // Object keys and values
-const typesArray = [];
 const POKE_API_OFFSET = 0;
 const POKE_API_LIMIT = 50;
 const bulbasaurURL = "https://pokeapi.co/api/v2/pokemon/1/" // URL for bulbasaur
+const typeURL =  "https://pokeapi.co/api/v2/type" // URL for all types of pokemon
 
 
 
@@ -20,7 +20,7 @@ async function getPokemons(){
     let responseAsJson = await response.json();
     let array = Object.keys(responseAsJson.results);
         for (let index = 0; index < array.length; index++) { // push the url keys into the global array named dataArray
-            dataArray.push(
+                dataArray.push(
                 {
                     url : responseAsJson.results[index].url
                 })
@@ -43,26 +43,11 @@ let loopArray = Object.keys(dataArray);
         })
    }
     renderPokemons();
-    //fetchTypesUrl();
     console.log(detailsDataArray);
 }
 
-/*async function fetchTypesUrl(){
-let response;
-let loopArray = Object.keys(dataArray);
-        for(let index = 0; index < dataArray.length; index++){
-            try{
-                response = await fetch(detailsDataArray[index].details.types[index].type.url);
-            }   catch(error){
-                console.log(error);
-            }
-            let responseAsJson = await response.json();
-                typesArray.push({
-                types : responseAsJson
-        })
-        }
-}
-*/
+
+
 // fetch for a single pokemon to get its atributes
 async function getSinglePokemon(){ 
     let singleResponse = await fetch(bulbasaurURL);
@@ -86,15 +71,24 @@ let loopArray = Object.keys(dataArray);
 }
 
 
-function getTemplate(index){
+function getTemplate(index){ 
+    let types;
+        types = renderTypes(index);
     return `
     <div class="template_box">
         <h4>#${detailsDataArray[index].details.id} ${detailsDataArray[index].details.name.toUpperCase()}</h4>
-        <img class="zoom img" src ="${detailsDataArray[index].details.sprites.front_default}"
-        <p>${detailsDataArray[index].details.types[0].type.name}</p>
+        <img class="zoom img" src ="${detailsDataArray[index].details.sprites.front_default}"/>
+        ${types} 
     </div>`
 }
-
+function renderTypes(index){
+let types = ""; // need to declare with  to prevent undefined
+for (let typeIndex = 0; typeIndex < detailsDataArray[index].details.types.length; typeIndex++) { 
+      // typeIndex is the index of the inside Array of detailDataArray[].details.types[], to get the types of each Pokemon
+         types += `<button class="type-name">${detailsDataArray[index].details.types[typeIndex].type.name}</button>`
+    }
+    return types
+}
 
 function init(index){
 getPokemons();

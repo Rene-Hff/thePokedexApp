@@ -45,16 +45,17 @@ header{
     align-items: center;
     flex-direction: column;
     border-radius: 12px;
+    border: 1px solid lightgray;
     padding: 8px;
-    background-color: rgb(255, 255, 255);
     height: auto;
     width: 200px;
     margin: 2px;
+    color: lightgray;
 }
 
 .img{
-height: 150px;
-width: 150px;
+    height: 150px;
+    width: 150px;
 }
 .zoom:hover{
     cursor: pointer;
@@ -62,3 +63,15 @@ width: 150px;
     transition: 0.3s ease-in-out;
 }
 
+.type-name{
+    font-weight: bold;
+    border : 1px solid lightgray;
+    border-radius : 15px;
+    margin: 2px;
+}
+.grass{
+background-color: green;
+}
+ .fire{
+background-color: red;
+}
