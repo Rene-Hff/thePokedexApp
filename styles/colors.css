@@ -1,0 +1,36 @@
+.grass{
+    background-color: rgb(88, 226, 88);
+}
+
+ .fire{
+    background-color: rgb(221, 74, 74);
+}
+
+.poison{
+    background-color: rgb(50, 30, 56);
+}
+
+.water{
+    background-color: rgb(125, 125, 233);
+}
+
+.bug{
+    background-color: rgb(131, 66, 66);
+}
+
+.electric{
+    background-color: rgb(247, 183, 23);
+}
+
+.ground{
+    background-color: rgb(224, 128, 96);
+}
+
+.normal{
+    background-color: rgb(231, 212, 186);
+    color: rgb(24, 23, 23);
+}
+
+.fairy{
+    background-color: rgb(199, 73, 125);
+}

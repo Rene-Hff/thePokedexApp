@@ -71,17 +71,17 @@ let loopArray = Object.keys(dataArray);
 }
 
 
-function getTemplate(index){ 
+function getTemplate(index, typeIndex){ 
     let types;
-        types = renderTypes(index);
+        types = renderTypes(index, typeIndex);
     return `
-    <div class="template_box">
+    <div class="template_box ${detailsDataArray[index].details.types[0].type.name}"> 
         <h4>#${detailsDataArray[index].details.id} ${detailsDataArray[index].details.name.toUpperCase()}</h4>
         <img class="zoom img" src ="${detailsDataArray[index].details.sprites.front_default}"/>
         ${types} 
     </div>`
 }
-function renderTypes(index){
+function renderTypes(index, typeIndex){
 let types = ""; // need to declare with  to prevent undefined
 for (let typeIndex = 0; typeIndex < detailsDataArray[index].details.types.length; typeIndex++) { 
       // typeIndex is the index of the inside Array of detailDataArray[].details.types[], to get the types of each Pokemon
