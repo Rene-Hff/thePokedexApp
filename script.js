@@ -63,10 +63,10 @@ async function getSinglePokemon(){
 
 
 async function renderPokemons(){
-document.getElementById('pokemonlist').innerHTML = "";
+document.getElementById('pokemonList').innerHTML = "";
 let loopArray = Object.keys(dataArray);
     for (let index = 0; index < loopArray.length; index++) {
-        document.getElementById('pokemonlist').innerHTML += getTemplate(index);   
+        document.getElementById('pokemonList').innerHTML += getTemplate(index);   
     }
 }
 
@@ -75,17 +75,49 @@ function getTemplate(index, typeIndex){
     let types;
         types = renderTypes(index, typeIndex);
     return `
-    <div class="template_box ${detailsDataArray[index].details.types[0].type.name}"> 
-        <h4>#${detailsDataArray[index].details.id} ${detailsDataArray[index].details.name.toUpperCase()}</h4>
+    <button type="button" class="template_box ${detailsDataArray[index].details.types[0].type.name}" onclick="openDialog(${index})"> 
+        <h2>#${detailsDataArray[index].details.id} ${detailsDataArray[index].details.name.toUpperCase()}</h2>
         <img class="zoom img" src ="${detailsDataArray[index].details.sprites.front_default}"/>
         ${types} 
-    </div>`
+    </button>`
 }
+
+function openDialog(index){
+let dialogRef = document.getElementById('cardDialog');
+    dialogRef.showModal();
+    renderDialogCard(index)
+}
+function renderDialogCard(index){
+let diaCont = document.getElementById('dialogContentBox');
+let info = document.getElementById('infoCardBtn');
+let btnDiv = document.getElementById('buttonsDiv');
+    diaCont.innerHTML = getTemplate(index);
+    info.innerHTML = renderInfo(index);
+     btnDiv.innerHTML = renderDialogBtns(index);
+}
+
+function renderDialogBtns(index){
+return `
+    <button class="buttonStyles">Info</button>
+    <button class="buttonStyles">Stats</button>
+    <button class="buttonStyles">Evo</button>             
+`
+}
+function renderInfo(index){
+return `
+    <p>Weight: ${detailsDataArray[index].details.weight}</p>
+    <p>Height: ${detailsDataArray[index].details.height}</p>
+    <p>Base Experience: ${detailsDataArray[index].details.base_experience}</p>
+    <p>Abilities: ${detailsDataArray[index].details.abilities[0].ability.name} & ${detailsDataArray[index].details.abilities[1].ability.name}</p>
+`
+}
+
+
 function renderTypes(index, typeIndex){
 let types = ""; // need to declare with  to prevent undefined
 for (let typeIndex = 0; typeIndex < detailsDataArray[index].details.types.length; typeIndex++) { 
       // typeIndex is the index of the inside Array of detailDataArray[].details.types[], to get the types of each Pokemon
-         types += `<button class="type-name">${detailsDataArray[index].details.types[typeIndex].type.name}</button>`
+         types += `<div class="type-name">${detailsDataArray[index].details.types[typeIndex].type.name}</div>`
     }
     return types
 }

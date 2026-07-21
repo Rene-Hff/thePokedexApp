@@ -28,10 +28,10 @@ header{
     max-width: 1920px;
     height: auto;
     border: 12px solid black;
-    background-color: rgb(43, 40, 40);
+    background-color: rgb(66, 64, 64);
 }
 
-#pokemonlist{
+#pokemonList{
     gap: 16px;
     padding: 24px;
     display: flex;
@@ -45,12 +45,16 @@ header{
     align-items: center;
     flex-direction: column;
     border-radius: 12px;
-    border: 1px solid lightgray;
+    border: 8px solid rgb(238, 208, 75);
     padding: 8px;
-    height: auto;
+    height: 300px;
     width: 200px;
     margin: 2px;
     color: lightgray;
+}
+
+.template_box:hover{
+    cursor: pointer;
 }
 
 .img{
@@ -64,13 +68,56 @@ header{
 }
 
 .type-name{
-    width : 70px;
+    font-weight: bold;
     font-family: monospace;
-    border : 1px solid lightgray;
-    border-radius : 15px;
     margin: 2px;
     padding: 4px;
 }
 .type-name:hover{
     cursor: pointer;
+}
+
+dialog[open]{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-evenly;
+    top: 50%;
+    left: 50%;
+    position: fixed;
+    translate: -50% -50%;
+    border-radius: 15px;
+}
+
+dialog::backdrop{
+    background-color: rgb(15, 15, 15);
+    opacity: 0.9;
+}
+
+#cardDialog{
+background-color: rgb(255, 255, 255);
+color: rgb(24, 23, 23);
+}
+
+#dialogContentBox{
+    height: auto;
+}
+
+.cardButtons{
+    width : auto;
+    height: 100px;
+}
+
+#buttonsDiv{
+    display: flex;
+    justify-content: space-evenly;
+    gap: 8px;
+}
+
+.buttonStyles{
+    width: 55px;
+    border: none;
+    background-color: rgb(238, 208, 75);
+    border-radius: 12px;
+    margin-top: 8px;
 }
