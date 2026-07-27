@@ -121,3 +121,30 @@ color: rgb(24, 23, 23);
     border-radius: 12px;
     margin-top: 8px;
 }
+
+.buttonStyles:hover{
+    cursor: pointer;
+}
+
+#infoCard{
+    height: 200px;
+    width: 200px;
+    padding: 8px;
+}
+
+#progressCard{
+    height: 200px;
+    width: 200px;
+    padding: 8px;
+}
+
+#evoCard{
+    height: 200px;
+    width: 200px;
+    padding: 8px;
+}
+
+.bar{
+    background-color: rgb(53, 53, 185);
+    margin-bottom: 8px;
+}

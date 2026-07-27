@@ -5,6 +5,7 @@ const POKE_API_OFFSET = 0;
 const POKE_API_LIMIT = 50;
 const bulbasaurURL = "https://pokeapi.co/api/v2/pokemon/1/" // URL for bulbasaur
 const typeURL =  "https://pokeapi.co/api/v2/type" // URL for all types of pokemon
+const dialogRef = document.getElementById('cardDialog');
 
 
 
@@ -83,35 +84,62 @@ function getTemplate(index, typeIndex){
 }
 
 function openDialog(index){
-let dialogRef = document.getElementById('cardDialog');
     dialogRef.showModal();
     renderDialogCard(index)
 }
+
+function bubblingPrevention(event){
+    event.stopPropagation();
+}
+
 function renderDialogCard(index){
 let diaCont = document.getElementById('dialogContentBox');
-let info = document.getElementById('infoCardBtn');
 let btnDiv = document.getElementById('buttonsDiv');
+let info = document.getElementById('infoCard');
     diaCont.innerHTML = getTemplate(index);
+    btnDiv.innerHTML = renderDialogBtns(index);
     info.innerHTML = renderInfo(index);
-     btnDiv.innerHTML = renderDialogBtns(index);
 }
 
 function renderDialogBtns(index){
 return `
-    <button class="buttonStyles">Info</button>
-    <button class="buttonStyles">Stats</button>
+    <button class="buttonStyles" onclick="renderInfo(${index})">Info</button>
+    <button class="buttonStyles" onclick="renderProgress(${index})">Stats</button>
     <button class="buttonStyles">Evo</button>             
 `
 }
 function renderInfo(index){
-return `
+let info = document.getElementById('infoCard');
+document.getElementById('progressCard').style = "display: none";
+document.getElementById('infoCard').style = "";
+info.innerHTML = `
     <p>Weight: ${detailsDataArray[index].details.weight}</p>
     <p>Height: ${detailsDataArray[index].details.height}</p>
     <p>Base Experience: ${detailsDataArray[index].details.base_experience}</p>
     <p>Abilities: ${detailsDataArray[index].details.abilities[0].ability.name} & ${detailsDataArray[index].details.abilities[1].ability.name}</p>
 `
+return info.innerHTML
 }
 
+function renderProgress(index){
+    let progress = document.getElementById('progressCard');
+    document.getElementById('infoCard').style = "display: none";
+    document.getElementById('progressCard').style = "";
+    progress.innerHTML = `
+    <div class="progressBarDiv">
+        <div class="bar" style="height: 15px; width: 60%"></div>
+    </div>
+    <div class="progressBarDiv">
+        <div class="bar" style="height: 15px; width: 40%"></div>
+    </div>
+    <div class="progressBarDiv">
+        <div class="bar" style="height: 15px; width: 20%"></div>
+    </div>
+    <div class="progressBarDiv">
+        <div class="bar" style="height: 15px; width: 20%"></div>
+    </div>
+`
+}
 
 function renderTypes(index, typeIndex){
 let types = ""; // need to declare with  to prevent undefined
@@ -121,7 +149,9 @@ for (let typeIndex = 0; typeIndex < detailsDataArray[index].details.types.length
     }
     return types
 }
-
+function closeDialog(){
+dialogRef.close();
+}
 function init(index){
 getPokemons();
 getSinglePokemon();
