@@ -95,8 +95,8 @@ dialog::backdrop{
 }
 
 #cardDialog{
-background-color: rgb(255, 255, 255);
-color: rgb(24, 23, 23);
+    background-color: rgb(255, 255, 255);
+    color: rgb(24, 23, 23);
 }
 
 #dialogContentBox{
@@ -127,6 +127,9 @@ color: rgb(24, 23, 23);
 }
 
 #infoCard{
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
     height: 200px;
     width: 200px;
     padding: 8px;
@@ -135,7 +138,7 @@ color: rgb(24, 23, 23);
 #progressCard{
     height: 200px;
     width: 200px;
-    padding: 8px;
+    padding: 2px;
 }
 
 #evoCard{
@@ -145,6 +148,14 @@ color: rgb(24, 23, 23);
 }
 
 .bar{
-    background-color: rgb(53, 53, 185);
-    margin-bottom: 8px;
+    background-color: rgb(17, 157, 182);
+    border-radius: 15px;
+    
+}
+
+.progressBarDiv{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
 }
