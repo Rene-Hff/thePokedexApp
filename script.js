@@ -84,7 +84,7 @@ let loopArray = Object.keys(specArray);
     fetchForEvoChainData();
 }
 
-async function fetchForEvoChainData(){
+async function fetchForEvoChainData(){ // create array for evo-chain data, to execute on html
 let response;
 let loopArray = Object.keys(evoChainArray);
     for (let index = 0; index < evoChainArray.length; index++) {
@@ -154,13 +154,14 @@ function renderDialogBtns(index){
 return `
     <button class="buttonStyles" onclick="renderInfo(${index})">Info</button>
     <button class="buttonStyles" onclick="renderProgress(${index})">Stats</button>
-    <button class="buttonStyles">Evo</button>             
+    <button class="buttonStyles" onclick="renderEvoCard(${index})">Evo</button>             
 `
 }
 
 function renderInfo(index){
     let info = document.getElementById('infoCard');
     document.getElementById('progressCard').style = "display: none";
+    document.getElementById('evoCard').style = "display: none";
     document.getElementById('infoCard').style = "";
     info.innerHTML = `
         <p>Weight: ${detailsDataArray[index].details.weight}</p>
@@ -174,6 +175,7 @@ return info.innerHTML
 function renderProgress(index){
     let progress = document.getElementById('progressCard');
     document.getElementById('infoCard').style = "display: none";
+    document.getElementById('evoCard').style = "display: none";
     document.getElementById('progressCard').style = "";
     progress.innerHTML = `
         <div class="progressBarDiv">
@@ -204,7 +206,23 @@ function renderTypes(index, typeIndex){
             return types
 }
 
-
+function renderEvoCard(index){
+    let evo = document.getElementById('evoCard');
+    document.getElementById('infoCard').style = "display: none";
+    document.getElementById('progressCard').style = "display: none";
+    document.getElementById('evoCard').style = "";
+        let evolvesTo = evoChainDataArray[index].chainKey.chain;
+            evo.innerHTML = ``;
+        while(evolvesTo.evolves_to.length >= 0){ 
+              evo.innerHTML += `
+            <div class="evoChainDiv">
+                <figure class="evoChainNamesandImgs">
+                    <img   src ="${detailsDataArray[index].details.sprites.front_default}"/>
+                    <figcaption>${evolvesTo.species.name.toUpperCase()} >> </figcaption> 
+                </figure>`  
+        evolvesTo = evolvesTo.evolves_to[0];     
+        } 
+}
 function closeDialog(){
     dialogRef.close();
 }
@@ -213,4 +231,3 @@ function init(index){
     getPokemons();
     getSinglePokemon();
 }
-
