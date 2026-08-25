@@ -101,7 +101,7 @@ let loopArray = Object.keys(evoChainArray);
     console.log(evoChainDataArray);
 }
 // fetch for a single pokemon to get its atributes
-async function getSinglePokemon(){ 
+/*async function getSinglePokemon(){ 
     let singleResponse = await fetch(bulbasaurURL);
     try{
         response = await fetch(bulbasaurURL);    
@@ -109,10 +109,10 @@ async function getSinglePokemon(){
     console.log(error);
     }
     let singleResponseAsJson = await response.json();
-    console.log(singleResponseAsJson); // with .moves you get the moves object and its keys and values 
+    console.log(singleResponseAsJson); // respond the Object from the pokemon and its keys 
     return singleResponseAsJson;
 }
-
+*/
 async function renderPokemons(){ // looping through the dataArray to return the templates for each pokemon
     document.getElementById('pokemonList').innerHTML = "";
     let loopArray = Object.keys(dataArray);
@@ -121,13 +121,13 @@ async function renderPokemons(){ // looping through the dataArray to return the 
         }
 }
 
-function getTemplate(index, typeIndex){ // Template for Card with name, img and types 
+function getTemplate(index, typeIndex){ // Template for Card with name, img and types + lazy loading added
     let types;
         types = renderTypes(index, typeIndex);
     return `
         <button type="button" class="template_box ${detailsDataArray[index].details.types[0].type.name}" onclick="openDialog(${index})"> 
             <h2>#${detailsDataArray[index].details.id} ${detailsDataArray[index].details.name.toUpperCase()}</h2>
-            <img class="zoom img" src ="${detailsDataArray[index].details.sprites.front_default}"/>
+            <img loading="lazy" class="zoom img" src ="${detailsDataArray[index].details.sprites.front_default}"/>
             ${types} 
         </button>`
 }
@@ -167,7 +167,7 @@ function renderInfo(index){
         <p>Weight: ${detailsDataArray[index].details.weight}</p>
         <p>Height: ${detailsDataArray[index].details.height}</p>
         <p>Base Experience: ${detailsDataArray[index].details.base_experience}</p>
-        <p>Abilities: ${detailsDataArray[index].details.abilities[0].ability.name} & ${detailsDataArray[index].details.abilities[1].ability.name}</p>
+        <p>Abilities: ${detailsDataArray[index].details.abilities[0].ability.name}</p> 
     `
 return info.innerHTML
 }
@@ -211,23 +211,66 @@ function renderEvoCard(index){
     document.getElementById('infoCard').style = "display: none";
     document.getElementById('progressCard').style = "display: none";
     document.getElementById('evoCard').style = "";
-        let evolvesTo = evoChainDataArray[index].chainKey.chain;
-            evo.innerHTML = ``;
-        while(evolvesTo.evolves_to.length >= 0){ 
-              evo.innerHTML += `
-            <div class="evoChainDiv">
-                <figure class="evoChainNamesandImgs">
-                    <img   src ="${detailsDataArray[index].details.sprites.front_default}"/>
-                    <figcaption>${evolvesTo.species.name.toUpperCase()} >> </figcaption> 
-                </figure>`  
-        evolvesTo = evolvesTo.evolves_to[0];     
-        } 
+    evo.innerHTML = ``;
+    let evolvesTo = evoChainDataArray[index].chainKey.chain;
+    findPokemon(evo, evolvesTo);
 }
+
+async function findPokemon(evo, evolvesTo){
+    let evoImgFetch = "";
+    let varForFetch;
+    let imgOutput ="";
+    for ( let indexLoop = 0; evolvesTo.evolves_to.length >= 0; indexLoop++){  
+        varForFetch = await fetchNewGenPokemon(evolvesTo);          //pokeapi.co/api/v2/pokemon/NR./
+        evoImgFetch =  await fetchToGetSprites(varForFetch);
+        imgOutput = evoImgFetch.sprites.front_default;
+        evo.innerHTML += getEvoTemplate(evolvesTo, imgOutput);
+        if (evolvesTo.evolves_to.length == 0){
+                break; 
+            }
+        evolvesTo = evolvesTo.evolves_to[0];
+    } 
+    return
+}
+
+async function fetchNewGenPokemon(evolvesTo){
+    let singleResponse = await fetch(evolvesTo.species.url);
+    try{
+        response = await fetch(evolvesTo.species.url);    
+    } catch (error){
+    console.log(error);
+    }
+    let singleResponseAsJson = await response.json();
+    console.log(singleResponseAsJson.varieties[0].pokemon.url); 
+    
+    return singleResponseAsJson.varieties[0].pokemon.url; // returns the url of pichu --- pokemon/172
+}
+async function fetchToGetSprites(varForFetch){
+    let singleResponse = await fetch(varForFetch);
+        try{
+          response = await fetch(varForFetch);
+        } catch (error){
+        console.log(error);
+        }
+    let singleResponseAsJson = await response.json();
+    console.log(singleResponseAsJson);
+    return singleResponseAsJson;
+}
+function getEvoTemplate(evolvesTo, imgOutput){
+return `<div class="evoChainDiv">
+            <figure class="evoChainNamesandImgs">
+                <img   src ="${imgOutput}"/>
+                    <figcaption>${evolvesTo.species.name.toUpperCase()} >> </figcaption> 
+            </figure>
+        </div>`
+}
+
+
 function closeDialog(){
     dialogRef.close();
 }
 
 function init(index){
     getPokemons();
-    getSinglePokemon();
+   // getSinglePokemon();
 }
