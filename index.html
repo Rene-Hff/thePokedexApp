@@ -3,24 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pokedex</title>
+    <title>Pokédex</title>
     <script src="script.js" defer></script>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="styles/colors.css">
     <link rel="stylesheet" href="./styles/fonts.css">
+    <link rel="icon" type="imgage/png" href="./img/pokeLogo.png">
 </head>
 <body onload="init()">
  <header>
+    <img id="headerLogo" src="./img/pokeLogo.png">
     <h1>The Pokédex</h1>
-    <nav class="navi">
-        <input id="input" type="search" placeholder="...">
-    </nav>
+    <search>
+        <form action="./search/">
+            <label for="pokemon">Find a Pokémon</label>
+                <input type="search" id="pokemon" />
+        </form>
+    </search>
  </header>
- <main>
+ <main data-id="content">
     <div id="main_div">
         <div id="pokemonList"></div>
     </div>
-    <dialog id="cardDialog" onclick="closeDialog()">
+    <div id="loadBtnDiv">
+            <button data-id="load-more-button" id="loadBtn" onclick="loadMore()">Load More</button>
+    </div>
+    
+    <dialog data-id="dialog" id="cardDialog" onclick="closeDialog()">
         <div id="dialogContentBox"></div>
             <div id="buttonsDiv" onclick="bubblingPrevention(event)">
             </div>
@@ -30,6 +39,7 @@
                     </div>
                         <div id="evoCard" style="display: none;">
                         </div>
+            <div id="slideButtons" onclick="bubblingPrevention(event)"></div>
         </div>
     </dialog>
  </main>

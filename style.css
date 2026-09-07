@@ -8,10 +8,16 @@
 header{
     color: whitesmoke;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-evenly;
     align-items: center;
     background-color: rgb(189, 56, 56);
     height:100px;
+}
+
+#headerLogo{
+    height: 100px;
+    width: 100px;
+    padding: 8px;
 }
 
 #input{
@@ -27,8 +33,28 @@ header{
     margin: auto;
     max-width: 1920px;
     height: auto;
-    border: 12px solid black;
     background-color: rgb(36, 34, 34);
+}
+
+#loadBtn{
+    display: flex;
+    justify-content: center;
+    background-color: #2196f3;
+    margin: auto;
+    border: none;
+    color: whitesmoke;
+    width:200px;
+    border-radius: 15px;
+}
+
+#loadBtn:hover{
+    background-color: #008cff;
+    cursor: pointer;
+}
+#loadBtnDiv{
+    margin-top: 8px;
+    margin-bottom: 8px;
+
 }
 
 #pokemonList{
@@ -98,7 +124,7 @@ dialog::backdrop{
     background-color: rgb(255, 255, 255);
     color: rgb(24, 23, 23);
     height: 600px;
-    width: 280px;
+    width: 340px;
 }
 
 #dialogContentBox{
@@ -144,19 +170,43 @@ dialog::backdrop{
 }
 
 #evoCard{
+    display: flex;
     height: 200px;
-    width: 200px;
     padding: 8px;
+}
+
+.evoChainDiv{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    font-size: 12px;
 }
 
 .bar{
     background-color: rgb(17, 157, 182);
-    border-radius: 15px;
-    
+    border-radius: 15px;   
 }
 
 .progressBarDiv{
     display: flex;
     justify-content: space-between;
     flex-direction: column;
+}
+
+#slideButtons{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 100px;
+}
+
+#leftBtn, #rightBtn{
+    display: flex;
+    justify-content: center;
+    border-radius: 50px;
+    border: none;
+    background-color: #2196f3;
+    color: whitesmoke;
+    height: 30px;
+    width: 30px;
 }
