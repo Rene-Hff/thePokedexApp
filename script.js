@@ -1,8 +1,6 @@
 const POKE_API_URL = "https://pokeapi.co/api/v2/pokemon" // get name and url
 const speciesURl   = "https://pokeapi.co/api/v2/pokemon-species";
 const detailsDataArray = []; // Main-Object keys and values
-const specArray = []; // species urls
-const evoChainArray =[]; // Objects to fetch for evo-chain
 const evoChainDataArray = [];
 let POKE_API_OFFSET = 0;
 const POKE_API_LIMIT = 30;
@@ -43,29 +41,31 @@ async function fetchUrl(dataArray){ // fetching the dataArray to get the details
         })
    }
     renderPokemons(detailsDataArray);
-    fetchSpecies(dataArray);
+    fetchSpecies();
 }
 
-async function fetchSpecies(dataArray){
+async function fetchSpecies(){
+    let specArray = []; // species urls
     let speciesData;
             try{
-                response = await fetch(speciesURl + `?limit=${POKE_API_LIMIT}&0ffset=${POKE_API_OFFSET}`); 
+                response = await fetch(speciesURl + `?limit=${POKE_API_LIMIT}&offset=${POKE_API_OFFSET}`); 
             } catch(error) {
                 console.log(error);
             }
         let responseAsJson = await response.json();
-            for (let index = 0; index < dataArray.length; index++) {
+            for (let index = 0; index < responseAsJson.results.length; index++) {
                 specArray.push({
                     speciesUrl : responseAsJson.results[index].url
                 })
             }
     console.log(specArray)
-    fetchForEvolutionStats(dataArray);
+    fetchForEvolutionStats(specArray);
  }
 
-async function fetchForEvolutionStats(dataArray){ // to get keys of the evo-chain
+async function fetchForEvolutionStats(specArray){ // to get keys of the evo-chain
 let response;
-    for (let index = 0; index < dataArray.length; index++) {
+const evoChainArray =[]; // Objects to fetch for evo-chain
+    for (let index = 0; index < specArray.length; index++) {
         try{
             response = await fetch(specArray[index].speciesUrl); // response recived an Object with key-value pairs to fetch for the evolution chain 
         }   catch(error){
@@ -77,12 +77,12 @@ let response;
         })
     }
     console.log(evoChainArray); // evoChainArray includes  Objects from url fetch of species
-    fetchForEvoChainData(dataArray);
+    fetchForEvoChainData(evoChainArray);
 }
 
-async function fetchForEvoChainData(dataArray){ // create array for evo-chain data, to execute on html
+async function fetchForEvoChainData(evoChainArray){ // create array for evo-chain data, to execute on html
 let response;
-    for (let index = 0; index < dataArray.length; index++) {
+    for (let index = 0; index < evoChainArray.length; index++) {
             try{
                 response = await fetch(evoChainArray[index].evoKey.evolution_chain.url);
             }   catch(error){
