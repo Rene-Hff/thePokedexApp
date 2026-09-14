@@ -6,6 +6,7 @@ let POKE_API_OFFSET = 0;
 const POKE_API_LIMIT = 30;
 const bulbasaurURL = "https://pokeapi.co/api/v2/pokemon/1/" // URL for bulbasaur
 const dialogRef = document.getElementById('cardDialog');
+let pokemonText;
 
 
 async function getPokemons(POKE_API_OFFSET){ //fetching the poke-api to get data and pushing the url in an array
@@ -115,9 +116,9 @@ async function renderPokemons(detailsDataArray){ // looping through the dataArra
         }
 }
 
-function getTemplate(index, typeIndex){ // Template for Card with name, img and types + lazy loading added
+function getTemplate(index){ // Template for Card with name, img and types + lazy loading added
     let types;
-        types = renderTypes(index, typeIndex);
+        types = renderTypes(index);
     return `
         <button data-id="card" type="button" class="template_box ${detailsDataArray[index].details.types[0].type.name}" onclick="openDialog(${index})"> 
             <h2>#${detailsDataArray[index].details.id} ${detailsDataArray[index].details.name.toUpperCase()}</h2>
@@ -193,7 +194,7 @@ function renderProgress(index){
     `
 }
 
-function renderTypes(index, typeIndex){
+function renderTypes(index){
     let types = ""; // need to declare with  to prevent undefined
         for (let typeIndex = 0; typeIndex < detailsDataArray[index].details.types.length; typeIndex++) { 
             // typeIndex is the index of the inside Array of detailDataArray[].details.types[], to get the types of each Pokemon
@@ -296,6 +297,21 @@ async function loadMore(){
     POKE_API_OFFSET+=30;
     await getPokemons(POKE_API_OFFSET);
 }
+function lookForPokemon(){
+    let outputForSearch = "";
+    pokemonText = document.getElementById('pokemonText').value.toLowerCase();
+        for (let index = 0; index < detailsDataArray.length; index++) {
+
+                if(pokemonText === detailsDataArray[index].details.name){
+                    outputForSearch = index;
+                    break;
+                } else {
+                console.log("pokemon not found");
+                }
+        }
+    openDialog(outputForSearch);
+}
+
 function init(index){
     getPokemons(POKE_API_OFFSET);
    // getSinglePokemon();
