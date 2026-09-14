@@ -121,11 +121,14 @@ dialog[open]{
     position: fixed;
     translate: -50% -50%;
     border-radius: 15px;
+    overscroll-behavior: contain;
 }
 
 dialog::backdrop{
     background-color: rgb(15, 15, 15);
     opacity: 0.9;
+    overflow: hidden;
+    overscroll-behavior: contain;
 }
 
 #cardDialog{

@@ -4,7 +4,6 @@ const detailsDataArray = []; // Main-Object keys and values
 const evoChainDataArray = [];
 let POKE_API_OFFSET = 0;
 const POKE_API_LIMIT = 30;
-const bulbasaurURL = "https://pokeapi.co/api/v2/pokemon/1/" // URL for bulbasaur
 const dialogRef = document.getElementById('cardDialog');
 let pokemonText;
 
@@ -96,19 +95,7 @@ let response;
     }
     console.log(evoChainDataArray);
 }
-// fetch for a single pokemon to get its atributes
-/*async function getSinglePokemon(){ 
-    let singleResponse = await fetch(bulbasaurURL);
-    try{
-        response = await fetch(bulbasaurURL);    
-    } catch (error){
-    console.log(error);
-    }
-    let singleResponseAsJson = await response.json();
-    console.log(singleResponseAsJson); // respond the Object from the pokemon and its keys 
-    return singleResponseAsJson;
-}
-*/
+
 async function renderPokemons(detailsDataArray){ // looping through the dataArray to return the templates for each pokemon
     document.getElementById('pokemonList').innerHTML = "";
         for (let index = 0; index < detailsDataArray.length; index++) {
@@ -297,6 +284,7 @@ async function loadMore(){
     POKE_API_OFFSET+=30;
     await getPokemons(POKE_API_OFFSET);
 }
+
 function lookForPokemon(){
     let outputForSearch = "";
     pokemonText = document.getElementById('pokemonText').value.toLowerCase();

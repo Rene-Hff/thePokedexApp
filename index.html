@@ -18,7 +18,7 @@
         <form action="./search/" method="dialog">
             <label for="pokemon">Find a Pokémon</label>
                 <input type="search" id="pokemonText" minlength="3"/>
-                <button id="submitBtn" onclick="lookForPokemon()">search</button>
+                <button data-id="search-button" id="submitBtn" onclick="lookForPokemon()">search</button>
         </form>
     </search>
  </header>
@@ -31,7 +31,7 @@
     </div>
     
     <dialog data-id="dialog" id="cardDialog" onclick="closeDialog()">
-        <div id="dialogContentBox"></div>
+        <div data-id="overlay-pokemon-name" id="dialogContentBox"></div>
             <div id="buttonsDiv" onclick="bubblingPrevention(event)">
             </div>
                 <div id="infoCard">
