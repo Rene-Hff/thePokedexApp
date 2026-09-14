@@ -301,16 +301,18 @@ function lookForPokemon(){
     let outputForSearch = "";
     pokemonText = document.getElementById('pokemonText').value.toLowerCase();
         for (let index = 0; index < detailsDataArray.length; index++) {
-
                 if(pokemonText === detailsDataArray[index].details.name){
                     outputForSearch = index;
+                    document.getElementById('pokemonText').value = "";
+                    openDialog(outputForSearch);
                     break;
-                } else {
-                console.log("pokemon not found");
+                }  
+                else if(!pokemonText.includes(detailsDataArray[index].details.name)){
+                    document.getElementById('pokemonText').value = "Enter a Pokemon!";
                 }
-        }
-    openDialog(outputForSearch);
+        }  
 }
+        
 
 function init(index){
     getPokemons(POKE_API_OFFSET);
