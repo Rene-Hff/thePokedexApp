@@ -6,6 +6,7 @@ let POKE_API_OFFSET = 0;
 const POKE_API_LIMIT = 30;
 const dialogRef = document.getElementById('cardDialog');
 let pokemonText;
+let load;
 
 
 async function getPokemons(POKE_API_OFFSET){ //fetching the poke-api to get data and pushing the url in an array
@@ -282,7 +283,9 @@ function closeDialog(){
 
 async function loadMore(){
     POKE_API_OFFSET+=30;
+    showMoreLoader();
     await getPokemons(POKE_API_OFFSET);
+    
 }
 
 function lookForPokemon(){
@@ -303,6 +306,26 @@ function lookForPokemon(){
         
 
 function init(index){
+    loaderFunction();
     getPokemons(POKE_API_OFFSET);
-   // getSinglePokemon();
+}
+
+function loaderFunction(){
+    load = setTimeout(showLoaderStart, 1000);
+}
+
+function showLoaderStart(){
+    document.getElementById("loader").style.display = "none";
+    document.getElementById("pokemonList").style.display = "flex";
+}
+
+function showMoreLoader(){
+    document.getElementById("loader").style.display = "flex";
+    document.getElementById("pokemonList").style.display = "none";
+    load = setTimeout(loaderNone, 1500);
+}
+
+function loaderNone(){
+    document.getElementById("loader").style.display = "none";
+    document.getElementById("pokemonList").style.display = "flex";
 }
