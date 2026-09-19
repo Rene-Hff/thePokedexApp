@@ -283,9 +283,7 @@ function closeDialog(){
 
 async function loadMore(){
     POKE_API_OFFSET+=30;
-    showMoreLoader();
-    await getPokemons(POKE_API_OFFSET);
-    
+    showMoreLoader(); 
 }
 
 function lookForPokemon(){
@@ -311,7 +309,7 @@ function init(index){
 }
 
 function loaderFunction(){
-    load = setTimeout(showLoaderStart, 1000);
+    load = setTimeout(showLoaderStart, 1500);
 }
 
 function showLoaderStart(){
@@ -320,12 +318,16 @@ function showLoaderStart(){
 }
 
 function showMoreLoader(){
+    document.getElementById("pokemonList").style.pointerEvents = "none";
     document.getElementById("loader").style.display = "flex";
-    document.getElementById("pokemonList").style.display = "none";
-    load = setTimeout(loaderNone, 1500);
+    document.getElementById("loadBtn").style.display = "none";
+    load = setTimeout(loaderNone, 2500);
 }
 
-function loaderNone(){
+async function loaderNone(){
     document.getElementById("loader").style.display = "none";
     document.getElementById("pokemonList").style.display = "flex";
+    document.getElementById("loadBtn").style.display ="flex";
+    await getPokemons(POKE_API_OFFSET);
+    document.getElementById("pokemonList").style.pointerEvents = "";
 }
