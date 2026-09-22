@@ -231,8 +231,10 @@ dialog::backdrop{
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 100px;
+    gap: 50px;
 }
+
+
 
 #leftBtn, #rightBtn{
     display: flex;
@@ -245,6 +247,10 @@ dialog::backdrop{
     width: 30px;
 }
 
+#leftBtn, #rightBtn:hover{
+    cursor:pointer;
+}
+
 #closeDialogBtn{
     display: flex;
     justify-content: center;
@@ -255,6 +261,10 @@ dialog::backdrop{
     color: whitesmoke;
     height: 30px;
     width: 30px;
+}
+
+#closeDialogBtn:hover{
+    cursor: pointer;
 }
 
 #loader {

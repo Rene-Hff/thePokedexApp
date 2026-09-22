@@ -1,6 +1,6 @@
-const POKE_API_URL = "https://pokeapi.co/api/v2/pokemon" // get name and url
+const POKE_API_URL = "https://pokeapi.co/api/v2/pokemon" 
 const speciesURl   = "https://pokeapi.co/api/v2/pokemon-species";
-const detailsDataArray = []; // Main-Object keys and values
+const detailsDataArray = []; 
 const evoChainDataArray = [];
 let POKE_API_OFFSET = 0;
 const POKE_API_LIMIT = 30;
@@ -8,8 +8,8 @@ const dialogRef = document.getElementById('cardDialog');
 let pokemonText;
 let load;
 
-
-async function getPokemons(POKE_API_OFFSET){ //fetching the poke-api to get data and pushing the url in an array
+//fetching the poke-api to get data and pushing the url in an array
+async function getPokemons(POKE_API_OFFSET){ 
     let response;
     let dataArray = [];
         try{
@@ -25,10 +25,10 @@ async function getPokemons(POKE_API_OFFSET){ //fetching the poke-api to get data
                 })
         }
     fetchUrl(dataArray);
-    console.log(dataArray);
 }
 
-async function fetchUrl(dataArray){ // fetching the dataArray to get the details of each pokemon
+// fetching the dataArray to get the details of each pokemon
+async function fetchUrl(dataArray){ 
     let response;
         for (let index = 0; index < dataArray.length; index++) {        
             try{
@@ -46,7 +46,7 @@ async function fetchUrl(dataArray){ // fetching the dataArray to get the details
 }
 
 async function fetchSpecies(){
-    let specArray = []; // species urls
+    let specArray = []; 
     let speciesData;
             try{
                 response = await fetch(speciesURl + `?limit=${POKE_API_LIMIT}&offset=${POKE_API_OFFSET}`); 
@@ -59,29 +59,28 @@ async function fetchSpecies(){
                     speciesUrl : responseAsJson.results[index].url
                 })
             }
-    console.log(specArray)
     fetchForEvolutionStats(specArray);
  }
-
-async function fetchForEvolutionStats(specArray){ // to get keys of the evo-chain
+// get keys of the evo-chain
+async function fetchForEvolutionStats(specArray){ 
 let response;
-const evoChainArray =[]; // Objects to fetch for evo-chain
+const evoChainArray =[]; 
     for (let index = 0; index < specArray.length; index++) {
         try{
-            response = await fetch(specArray[index].speciesUrl); // response recived an Object with key-value pairs to fetch for the evolution chain 
+            response = await fetch(specArray[index].speciesUrl);  
         }   catch(error){
             console.log(error);
         }
     let responseAsJson = await response.json();
         evoChainArray.push({
-        evoKey : responseAsJson     // evoKey = Object 
+        evoKey : responseAsJson     
         })
     }
-    console.log(evoChainArray); // evoChainArray includes  Objects from url fetch of species
     fetchForEvoChainData(evoChainArray);
 }
 
-async function fetchForEvoChainData(evoChainArray){ // create array for evo-chain data, to execute on html
+// create array for evo-chain data, to execute on html
+async function fetchForEvoChainData(evoChainArray){ 
 let response;
     for (let index = 0; index < evoChainArray.length; index++) {
             try{
@@ -94,26 +93,14 @@ let response;
         chainKey: responseAsJson
         })
     }
-    console.log(evoChainDataArray);
 }
 
-async function renderPokemons(detailsDataArray){ // looping through the dataArray to return the templates for each pokemon
+// looping through the dataArray to return the templates for each pokemon
+async function renderPokemons(detailsDataArray){ 
     document.getElementById('pokemonList').innerHTML = "";
         for (let index = 0; index < detailsDataArray.length; index++) {
             document.getElementById('pokemonList').innerHTML += getTemplate(index);   
         }
-}
-
-function getTemplate(index){ // Template for Card with name, img and types + lazy loading added
-    let types;
-        types = renderTypes(index);
-    return `
-        <button data-id="card" type="button" class="template_box ${detailsDataArray[index].details.types[0].type.name}" onclick="openDialog(${index})"> 
-            <h2>#${detailsDataArray[index].details.id} ${detailsDataArray[index].details.name.toUpperCase()}</h2>
-                <img data-id="card-image" loading="lazy" class="zoom img" src ="${detailsDataArray[index].details.sprites.front_default}"/> 
-                <img id="dialog-image" src ="./img/pokeLogo.png">
-            ${types} 
-        </button>`
 }
 
 function openDialog(index){
@@ -132,61 +119,32 @@ function renderDialogCard(index){
     let navigations = document.getElementById('slideButtons');
         diaCont.innerHTML = getTemplate(index);
         btnDiv.innerHTML = renderDialogBtns(index);
-        info.innerHTML = renderInfo(index);
+        info.innerHTML = renderInfoTemplate(index);
         navigations.innerHTML = renderNaviBtns(index);
-}
-
-function renderDialogBtns(index){
-return `
-    <button class="buttonStyles" onclick="renderInfo(${index})">Info</button>
-    <button class="buttonStyles" onclick="renderProgress(${index})">Stats</button>
-    <button class="buttonStyles" onclick="renderEvoCard(${index})">Evo</button>             
-`
+        renderEvoCard(index);
+        renderInfoTemplate(index);
+        renderProgress(index);
 }
 
 function renderInfo(index){
     let info = document.getElementById('infoCard');
-    document.getElementById('progressCard').style = "display: none";
-    document.getElementById('evoCard').style = "display: none";
-    document.getElementById('infoCard').style = "";
-    info.innerHTML = `
-        <p>Weight: ${detailsDataArray[index].details.weight}</p>
-        <p>Height: ${detailsDataArray[index].details.height}</p>
-        <p>Base Experience: ${detailsDataArray[index].details.base_experience}</p>
-        <p>Abilities: ${detailsDataArray[index].details.abilities[0].ability.name}</p> 
-    `
-return info.innerHTML
+        document.getElementById('progressCard').style = "display: none";
+        document.getElementById('evoCard').style = "display: none";
+        document.getElementById('infoCard').style = "";
+        info.innerHTML = renderInfoTemplate(index);  
 }
 
 function renderProgress(index){
     let progress = document.getElementById('progressCard');
-    document.getElementById('infoCard').style = "display: none";
-    document.getElementById('evoCard').style = "display: none";
-    document.getElementById('progressCard').style = "";
-    progress.innerHTML = `
-        <div class="progressBarDiv">
-            <span>${detailsDataArray[index].details.stats[0].stat.name}:</span>
-            <div class="bar" style="height: 15px; width: ${detailsDataArray[index].details.stats[0].base_stat}%"></div>
-        </div>
-        <div class="progressBarDiv">
-            <span>${detailsDataArray[index].details.stats[1].stat.name}:</span>
-            <div class="bar" style="height: 15px; width: ${detailsDataArray[index].details.stats[1].base_stat}%"></div>
-        </div>
-        <div class="progressBarDiv">
-            <span>${detailsDataArray[index].details.stats[2].stat.name}:</span>
-            <div class="bar" style="height: 15px; width: ${detailsDataArray[index].details.stats[2].base_stat}%"></div>
-        </div>
-        <div class="progressBarDiv">
-            <span>${detailsDataArray[index].details.stats[3].stat.name}:</span>
-            <div class="bar" style="height: 15px; width: ${detailsDataArray[index].details.stats[3].base_stat}%"></div>
-        </div>
-    `
+        document.getElementById('infoCard').style = "display: none";
+        document.getElementById('evoCard').style = "display: none";
+        document.getElementById('progressCard').style = "";
+        progress.innerHTML = renderProgressTemplate(index);
 }
 
 function renderTypes(index){
-    let types = ""; // need to declare with  to prevent undefined
+    let types = ""; 
         for (let typeIndex = 0; typeIndex < detailsDataArray[index].details.types.length; typeIndex++) { 
-            // typeIndex is the index of the inside Array of detailDataArray[].details.types[], to get the types of each Pokemon
                 types += `<div class="type-name">${detailsDataArray[index].details.types[typeIndex].type.name}</div>`
             }
             return types
@@ -202,21 +160,12 @@ function renderEvoCard(index){
     findPokemon(evo, evolvesTo);
 }
 
-function renderNaviBtns(index){
-return `
-        <button data-id="prev-button" id="leftBtn" onclick="slideImg('left', ${index})"> < </button>
-        <button data-id="close-dialog" id="closeDialogBtn" onclick="closeDialog('${index}')"> X </button>
-        <button data-id="next-button" id="rightBtn" onclick="slideImg('right', ${index})"> > </button>
-        
-`
-}
-
 async function findPokemon(evo, evolvesTo){
     let evoImgFetch = "";
     let varForFetch;
     let imgOutput ="";
     for ( let indexLoop = 0; evolvesTo.evolves_to.length >= 0; indexLoop++){  
-        varForFetch = await fetchNewGenPokemon(evolvesTo);          //pokeapi.co/api/v2/pokemon/NR./
+        varForFetch = await fetchNewGenPokemon(evolvesTo);          
         evoImgFetch =  await fetchToGetSprites(varForFetch);
         imgOutput = evoImgFetch.sprites.front_default;
         evo.innerHTML += getEvoTemplate(evolvesTo, imgOutput);
@@ -238,7 +187,7 @@ async function fetchNewGenPokemon(evolvesTo){
     let singleResponseAsJson = await response.json();
     console.log(singleResponseAsJson.varieties[0].pokemon.url); 
     
-    return singleResponseAsJson.varieties[0].pokemon.url; // returns the url of pichu --- pokemon/172
+    return singleResponseAsJson.varieties[0].pokemon.url;
 }
 
 async function fetchToGetSprites(varForFetch){
@@ -249,17 +198,7 @@ async function fetchToGetSprites(varForFetch){
         console.log(error);
         }
     let singleResponseAsJson = await response.json();
-    console.log(singleResponseAsJson);
     return singleResponseAsJson;
-}
-
-function getEvoTemplate(evolvesTo, imgOutput){
-return `<div class="evoChainDiv">
-            <figure class="evoChainNamesandImgs">
-                <img   src ="${imgOutput}"/>
-                    <figcaption>${evolvesTo.species.name.toUpperCase()} <br> >> </br> </figcaption> 
-            </figure>
-        </div>`
 }
 
 function slideImg(direction, index){
@@ -272,11 +211,17 @@ if (direction == 'left') {
 
 function increaseIndex(index){
 index++;
+if(index == detailsDataArray.length){
+    index = 0;
+}
 renderDialogCard(index);
 }
 
 function decreaseIndex(index){
 index--;
+if(index < 0){
+    index = detailsDataArray.length-1;
+}
 renderDialogCard(index);
 }
 
