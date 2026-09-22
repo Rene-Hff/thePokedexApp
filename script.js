@@ -110,7 +110,8 @@ function getTemplate(index){ // Template for Card with name, img and types + laz
     return `
         <button data-id="card" type="button" class="template_box ${detailsDataArray[index].details.types[0].type.name}" onclick="openDialog(${index})"> 
             <h2>#${detailsDataArray[index].details.id} ${detailsDataArray[index].details.name.toUpperCase()}</h2>
-            <img data-id="card-image" loading="lazy" class="zoom img" src ="${detailsDataArray[index].details.sprites.front_default}"/>
+                <img data-id="card-image" loading="lazy" class="zoom img" src ="${detailsDataArray[index].details.sprites.front_default}"/> 
+                <img id="dialog-image" src ="./img/pokeLogo.png">
             ${types} 
         </button>`
 }
@@ -204,7 +205,9 @@ function renderEvoCard(index){
 function renderNaviBtns(index){
 return `
         <button data-id="prev-button" id="leftBtn" onclick="slideImg('left', ${index})"> < </button>
+        <button data-id="close-dialog" id="closeDialogBtn" onclick="closeDialog('${index}')"> X </button>
         <button data-id="next-button" id="rightBtn" onclick="slideImg('right', ${index})"> > </button>
+        
 `
 }
 
@@ -293,15 +296,19 @@ function lookForPokemon(){
                 if(pokemonText === detailsDataArray[index].details.name){
                     outputForSearch = index;
                     document.getElementById('pokemonText').value = "";
+                    document.getElementById('error-message').innerHTML = "";
                     openDialog(outputForSearch);
                     break;
                 }  
                 else if(!pokemonText.includes(detailsDataArray[index].details.name)){
-                    document.getElementById('pokemonText').value = "Enter a Pokemon!";
+                document.getElementById('error-message').innerHTML = `<p data-id="not-found"> No valid input ! </p>`;
                 }
         }  
 }
-        
+
+function removeErrorMsg(){
+    document.getElementById('error-message').innerHTML = "";
+}      
 
 function init(index){
     loaderFunction();

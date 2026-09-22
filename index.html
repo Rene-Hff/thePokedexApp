@@ -16,9 +16,9 @@
     <h1>The Pokédex</h1>
     <search>
         <form action="./search/" method="dialog">
-            <label for="pokemon">Find a Pokémon</label>
-                <input type="search" id="pokemonText" minlength="3"/>
+                <input type="search" id="pokemonText" minlength="3" placeholder=" search for a Pokémon " onfocus="removeErrorMsg()"/>
                 <button data-id="search-button" id="submitBtn" onclick="lookForPokemon()">search</button>
+                <div data-id="not-found" id="error-message"></div>
         </form>
     </search>
  </header>
@@ -31,7 +31,7 @@
             <button data-id="load-more-button" id="loadBtn" onclick="loadMore()">Load More</button>
     </div>
     
-    <dialog data-id="dialog" id="cardDialog" onclick="closeDialog()">
+    <dialog data-id="dialog" id="cardDialog">
         <div data-id="overlay-pokemon-name" id="dialogContentBox"></div>
             <div id="buttonsDiv" onclick="bubblingPrevention(event)">
             </div>

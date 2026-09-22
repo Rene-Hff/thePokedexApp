@@ -11,7 +11,9 @@ header{
     justify-content: space-evenly;
     align-items: center;
     background-color: rgb(189, 56, 56);
-    height:100px;
+    height:200px;
+    flex-wrap: wrap;
+    padding: 12px;
 }
 
 #headerLogo{
@@ -24,7 +26,8 @@ input{
     width: 200px;
     border: none;
     border-radius: 15px;
-    margin-left: 10px;
+    padding: 4px;
+    font-weight: bold;
 }
 
 input:invalid {
@@ -32,14 +35,24 @@ input:invalid {
 }
 
 input:invalid:focus {
-    background-image: linear-gradient(lightgray, gray);
+    background-image: linear-gradient(lightgray, rgb(248, 71, 71));
 }
+
 #submitBtn{
-    margin-left: 10px;
-    border: none;
+    margin-left: 4px;
+    border: 3px solid #2196f3;
     border-radius: 15px;
-    padding-left: 16px;
-    padding-right: 16px;
+    width: 80px;
+    padding: 4px;
+    background-color: whitesmoke;
+    color: #2196f3;
+    font-weight: bold;
+}
+
+#submitBtn:hover{
+    color:whitesmoke;
+    background-color: #2196f3;
+    cursor: pointer;
 }
 
 #main_div{
@@ -66,6 +79,7 @@ input:invalid:focus {
     background-color: #008cff;
     cursor: pointer;
 }
+
 #loadBtnDiv{
     margin-top: 8px;
     margin-bottom: 8px;
@@ -112,7 +126,7 @@ input:invalid:focus {
     font-weight: bold;
     font-family: monospace;
     margin: 2px;
-    padding: 4px;
+    padding: 2px;
 }
 .type-name:hover{
     cursor: pointer;
@@ -172,6 +186,7 @@ dialog::backdrop{
     cursor: pointer;
 }
 
+
 #infoCard{
     display: flex;
     justify-content: space-evenly;
@@ -190,7 +205,7 @@ dialog::backdrop{
 #evoCard{
     display: flex;
     height: 200px;
-    padding: 8px;
+    padding: 4px;
 }
 
 .evoChainDiv{
@@ -202,7 +217,7 @@ dialog::backdrop{
 
 .bar{
     max-width: 100%;
-    background-color: rgb(17, 157, 182);
+    background-color: #2196f3;
     border-radius: 15px;   
 }
 
@@ -230,6 +245,18 @@ dialog::backdrop{
     width: 30px;
 }
 
+#closeDialogBtn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50px;
+    border: none;
+    background-color: #f3564b;
+    color: whitesmoke;
+    height: 30px;
+    width: 30px;
+}
+
 #loader {
   margin: auto;
   border: 16px solid #f3f3f3;
@@ -240,7 +267,6 @@ dialog::backdrop{
   -webkit-animation: spin 2s linear infinite; /* Safari */
   animation: spin 2s linear infinite;
 }
-
 /* Safari */
 @-webkit-keyframes spin {
   0% { -webkit-transform: rotate(0deg); }
@@ -250,4 +276,10 @@ dialog::backdrop{
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+#dialog-image{
+    height: 45px;
+    opacity: 5%;
+    margin-top: -8px;
 }
