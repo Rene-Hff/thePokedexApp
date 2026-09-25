@@ -13,13 +13,12 @@
 </head>
 <body onload="init()">
  <header>
-    <img id="headerLogo" src="./img/pokeLogo.png">
+    <button id="homeBtn" onclick="refreshSite()"><img id="headerLogo" src="./img/pokeLogo.png"></button>
     <h1>The Pokédex</h1>
     <search>
         <form action="./search/" method="dialog">
-                <input type="search" id="pokemonText" minlength="3" placeholder=" search for a Pokémon " onfocus="removeErrorMsg()"/>
-                <button data-id="search-button" id="submitBtn" onclick="lookForPokemon()">search</button>
-                <div data-id="not-found" id="error-message"></div>
+                <input type="search" id="pokemonText" placeholder=" search for a Pokémon "/>
+                <button onclick="showInput()" id="searchBtn">search</button>
         </form>
     </search>
  </header>
@@ -45,6 +44,12 @@
             <div id="slideButtons" onclick="bubblingPrevention(event)"></div>
         </div>
     </dialog>
+    <dialog id="errorDialog">
+        <div id="errorContentBox">
+        
+        </div>
+    </dialog>
+
  </main>
 </body>
 </html>

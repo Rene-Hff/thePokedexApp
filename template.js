@@ -67,3 +67,8 @@ function getEvoTemplate(evolvesTo, imgOutput){
             </div>
     `
 }
+
+function renderErrorDialog(){
+    let errorContent = document.getElementById('errorContentBox');
+        errorContent.innerHTML = `<h4 data-id="not-found">Search wasn't successful. Please try again.</h4><button onclick="closeErrorDialog()">X</button>`;
+}

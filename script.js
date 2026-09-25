@@ -5,6 +5,7 @@ const evoChainDataArray = [];
 let POKE_API_OFFSET = 0;
 const POKE_API_LIMIT = 30;
 const dialogRef = document.getElementById('cardDialog');
+const eDialogRef = document.getElementById('errorDialog');
 let pokemonText;
 let load;
 
@@ -107,6 +108,14 @@ function openDialog(index){
     dialogRef.showModal();
     renderDialogCard(index)
 }
+function openErrorDialog(){
+    eDialogRef.showModal();
+    renderErrorDialog();
+}
+
+function closeErrorDialog(){
+eDialogRef.close();
+}
 
 function bubblingPrevention(event){
     event.stopPropagation();
@@ -185,8 +194,7 @@ async function fetchNewGenPokemon(evolvesTo){
     console.log(error);
     }
     let singleResponseAsJson = await response.json();
-    console.log(singleResponseAsJson.varieties[0].pokemon.url); 
-    
+
     return singleResponseAsJson.varieties[0].pokemon.url;
 }
 
@@ -234,28 +242,39 @@ async function loadMore(){
     showMoreLoader(); 
 }
 
-function lookForPokemon(){
-    let outputForSearch = "";
-    pokemonText = document.getElementById('pokemonText').value.toLowerCase();
-        for (let index = 0; index < detailsDataArray.length; index++) {
-                if(pokemonText === detailsDataArray[index].details.name){
-                    outputForSearch = index;
-                    document.getElementById('pokemonText').value = "";
-                    document.getElementById('error-message').innerHTML = "";
-                    openDialog(outputForSearch);
-                    break;
-                }  
-                else if(!pokemonText.includes(detailsDataArray[index].details.name)){
-                document.getElementById('error-message').innerHTML = `<p data-id="not-found"> No valid input ! </p>`;
-                }
-        }  
+function showInput(){
+let domOutput = "";
+    pokemonText = document.getElementById('pokemonText').value;
+    if(pokemonText.length >= 3){
+        document.getElementById('pokemonList').innerHTML = "";
+        pokemonText = document.getElementById('pokemonText').value.toLocaleLowerCase();
+        loopForTemplate(domOutput);
+    } else{ 
+            clearInputAndDialog();
+    } 
+    document.getElementById('pokemonText').value = "";
+}   
+
+function loopForTemplate(domOutput){
+for(let index = 0; index < detailsDataArray.length; index++){
+        if(detailsDataArray[index].details.name.includes(pokemonText)){
+            domOutput = index;
+            document.getElementById('main_div').style.height = "100vh";
+            document.getElementById('pokemonList').innerHTML += getTemplate(index);
+        } 
+    }
+    if(domOutput == ""){
+        clearInputAndDialog();
+        renderPokemons(detailsDataArray);
+    }
 }
 
-function removeErrorMsg(){
-    document.getElementById('error-message').innerHTML = "";
-}      
+function clearInputAndDialog(){
+    document.getElementById('pokemonText').value = "";
+    openErrorDialog();
+}
 
-function init(index){
+function init(){
     loaderFunction();
     getPokemons(POKE_API_OFFSET);
 }
@@ -282,4 +301,10 @@ async function loaderNone(){
     document.getElementById("loadBtn").style.display ="flex";
     await getPokemons(POKE_API_OFFSET);
     document.getElementById("pokemonList").style.pointerEvents = "";
+}
+
+function refreshSite(){
+    document.getElementById('main_div').style.height = "auto";
+    renderPokemons(detailsDataArray);
+
 }
