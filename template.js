@@ -1,15 +1,3 @@
-// Template for Card with name, img and types + lazy loading added
-function getTemplate(index){ 
-    let types;
-        types = renderTypes(index);
-    return `
-        <button data-id="card" type="button" class="template_box ${detailsDataArray[index].details.types[0].type.name}" onclick="openDialog(${index})"> 
-            <h2>#${detailsDataArray[index].details.id} ${detailsDataArray[index].details.name.toUpperCase()}</h2>
-                <img data-id="card-image" loading="lazy" class="zoom img" src ="${detailsDataArray[index].details.sprites.front_default}"/> 
-                <img id="dialog-image" src ="./img/pokeLogo.png">
-            ${types} 
-        </button>`
-}
 
 function renderDialogBtns(index){
     return `
@@ -68,7 +56,3 @@ function getEvoTemplate(evolvesTo, imgOutput){
     `
 }
 
-function renderErrorDialog(){
-    let errorContent = document.getElementById('errorContentBox');
-        errorContent.innerHTML = `<h4 data-id="not-found">Search wasn't successful. Please try again.</h4><button onclick="closeErrorDialog()">X</button>`;
-}

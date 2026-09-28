@@ -43,7 +43,6 @@ async function fetchUrl(dataArray){
         })
    }
     renderPokemons(detailsDataArray);
-    
 }
 
 async function fetchSpecies(){
@@ -80,7 +79,7 @@ const evoChainArray =[];
 }
 
 // create array for evo-chain data, to execute on html
-async function fetchForEvoChainData(evoChainArray){ 
+async function fetchForEvoChainData(evoChainArray){
 let response;
     for (let index = 0; index < evoChainArray.length; index++) {
             try{
@@ -95,6 +94,18 @@ let response;
     }
 }
 
+function getTemplate(index){ 
+    let types;
+        types = renderTypes(index);
+    return `
+        <button data-id="card" type="button" class="template_box ${detailsDataArray[index].details.types[0].type.name}" onclick="openDialog(${index})"> 
+            <h2>#${detailsDataArray[index].details.id} ${detailsDataArray[index].details.name.toUpperCase()}</h2>
+                <img data-id="card-image" loading="lazy" class="zoom img" src ="${detailsDataArray[index].details.sprites.front_default}"/> 
+                <img id="dialog-image" src ="./img/pokeLogo.png">
+            ${types} 
+        </button>`
+}
+
 // looping through the dataArray to return the templates for each pokemon
 async function renderPokemons(detailsDataArray){ 
     document.getElementById('pokemonList').innerHTML = "";
@@ -104,13 +115,21 @@ async function renderPokemons(detailsDataArray){
 }
 
 function openDialog(index){
-    fetchSpecies();
     dialogRef.showModal();
     renderDialogCard(index)
 }
-function openErrorDialog(){
+function openErrorDialog(pokemonText){
     eDialogRef.showModal();
-    renderErrorDialog();
+    renderErrorDialog(pokemonText);
+}
+
+function renderErrorDialog(pokemonText){
+    let errorContent = document.getElementById('errorContentBox');
+        if(pokemonText.length <3){
+            errorContent.innerHTML = `<h4>min. 3 letters please!</h4><button onclick="closeErrorDialog()">X</button>`
+        } else{
+            errorContent.innerHTML = `<h4 data-id="not-found">Search wasn't successful. Please try again.</h4><button onclick="closeErrorDialog()">X</button>`;
+        }
 }
 
 function closeErrorDialog(){
@@ -237,7 +256,8 @@ function closeDialog(){
 
 async function loadMore(){
     POKE_API_OFFSET+=30;
-    showMoreLoader(); 
+    fetchSpecies();
+    showMoreLoader();  
 }
 
 function showInput(){
@@ -248,9 +268,10 @@ let domOutput = "";
         pokemonText = document.getElementById('pokemonText').value.toLocaleLowerCase();
         loopForTemplate(domOutput);
     } else{ 
-            clearInputAndDialog();
+            clearInputAndDialog(pokemonText);
     } 
     document.getElementById('pokemonText').value = "";
+    document.getElementById('slideButtons').style.display = "none";
 }   
 
 function loopForTemplate(domOutput){
@@ -262,23 +283,24 @@ for(let index = 0; index < detailsDataArray.length; index++){
         } 
     }
     if(domOutput == ""){
-        clearInputAndDialog();
+        clearInputAndDialog(pokemonText);
         renderPokemons(detailsDataArray);
     }
 }
 
-function clearInputAndDialog(){
+function clearInputAndDialog(pokemonText){
     document.getElementById('pokemonText').value = "";
-    openErrorDialog();
+    openErrorDialog(pokemonText);
 }
 
 function init(){
+    fetchSpecies();
     loaderFunction();
     getPokemons(POKE_API_OFFSET);
 }
 
 function loaderFunction(){
-    load = setTimeout(showLoaderStart, 1500);
+    load = setTimeout(showLoaderStart, 1000);
 }
 
 function showLoaderStart(){
@@ -287,10 +309,10 @@ function showLoaderStart(){
 }
 
 function showMoreLoader(){
-    document.getElementById("pokemonList").style.pointerEvents = "none";
+    document.getElementById("pokemonList").style.display = "none";
     document.getElementById("loader").style.display = "flex";
     document.getElementById("loadBtn").style.display = "none";
-    load = setTimeout(loaderNone, 2500);
+    load = setTimeout(loaderNone, 1000);
 }
 
 async function loaderNone(){
@@ -303,6 +325,6 @@ async function loaderNone(){
 
 function refreshSite(){
     document.getElementById('main_div').style.height = "auto";
+    document.getElementById('slideButtons').style.display = "flex";
     renderPokemons(detailsDataArray);
-
 }
