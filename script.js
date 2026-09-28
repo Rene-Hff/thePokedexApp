@@ -130,7 +130,7 @@ function renderDialogCard(index){
         btnDiv.innerHTML = renderDialogBtns(index);
         info.innerHTML = renderInfoTemplate(index);
         navigations.innerHTML = renderNaviBtns(index);
-        renderInfoTemplate(index);
+        renderInfo(index);
 }
 
 function renderInfo(index){
