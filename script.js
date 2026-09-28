@@ -43,12 +43,11 @@ async function fetchUrl(dataArray){
         })
    }
     renderPokemons(detailsDataArray);
-    fetchSpecies();
+    
 }
 
 async function fetchSpecies(){
     let specArray = []; 
-    let speciesData;
             try{
                 response = await fetch(speciesURl + `?limit=${POKE_API_LIMIT}&offset=${POKE_API_OFFSET}`); 
             } catch(error) {
@@ -105,6 +104,7 @@ async function renderPokemons(detailsDataArray){
 }
 
 function openDialog(index){
+    fetchSpecies();
     dialogRef.showModal();
     renderDialogCard(index)
 }
@@ -130,9 +130,7 @@ function renderDialogCard(index){
         btnDiv.innerHTML = renderDialogBtns(index);
         info.innerHTML = renderInfoTemplate(index);
         navigations.innerHTML = renderNaviBtns(index);
-        renderEvoCard(index);
         renderInfoTemplate(index);
-        renderProgress(index);
 }
 
 function renderInfo(index){
