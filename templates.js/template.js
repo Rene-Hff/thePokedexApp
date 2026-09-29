@@ -1,4 +1,12 @@
-
+function getTemplate(index, types){ 
+    return `
+        <button data-id="card" type="button" class="template_box ${detailsDataArray[index].details.types[0].type.name}" onclick="openDialog(${index})"> 
+            <h2>#${detailsDataArray[index].details.id} ${detailsDataArray[index].details.name.toUpperCase()}</h2>
+                <img data-id="card-image" loading="lazy" class="zoom img" src ="${detailsDataArray[index].details.sprites.front_default}"/> 
+                <img id="dialog-image" src ="./img/pokeLogo.png">
+            ${types} 
+        </button>`
+}
 function renderDialogBtns(index){
     return `
         <button class="buttonStyles" onclick="renderInfo(${index})">Info</button>

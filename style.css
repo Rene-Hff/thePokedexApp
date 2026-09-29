@@ -5,6 +5,10 @@
     font-family: 'Palanquin';
 }
 
+body{
+    background-color: rgb(36, 34, 34);
+}
+
 header{
     color: whitesmoke;
     display: flex;
@@ -280,6 +284,7 @@ dialog::backdrop{
 }
 
 #loader {
+  inset: 0;
   margin: auto;
   border: 16px solid #f3f3f3;
   border-radius: 50%;

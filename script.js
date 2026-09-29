@@ -18,12 +18,12 @@ async function getPokemons(POKE_API_OFFSET){
         } catch (error){
             console.log(error);
         }
-    let responseAsJson = await response.json();
-        for (index = 0; index < Object.keys(responseAsJson.results).length; index++) { // push the url keys into the global array named dataArray
+        let responseAsJson = await response.json();
+        for (index = 0; index < Object.keys(responseAsJson.results).length; index++) { 
                 dataArray.push(
-                {
-                    url : responseAsJson.results[index].url
-                })
+            {
+            url : responseAsJson.results[index].url
+            })
         }
     fetchUrl(dataArray);
 }
@@ -60,10 +60,10 @@ async function fetchSpecies(){
             }
     fetchForEvolutionStats(specArray);
  }
-// get keys of the evo-chain
+
 async function fetchForEvolutionStats(specArray){ 
-let response;
-const evoChainArray =[]; 
+    let response;
+    const evoChainArray =[]; 
     for (let index = 0; index < specArray.length; index++) {
         try{
             response = await fetch(specArray[index].speciesUrl);  
@@ -78,9 +78,9 @@ const evoChainArray =[];
     fetchForEvoChainData(evoChainArray);
 }
 
-// create array for evo-chain data, to execute on html
+
 async function fetchForEvoChainData(evoChainArray){
-let response;
+    let response;
     for (let index = 0; index < evoChainArray.length; index++) {
             try{
                 response = await fetch(evoChainArray[index].evoKey.evolution_chain.url);
@@ -94,23 +94,13 @@ let response;
     }
 }
 
-function getTemplate(index){ 
-    let types;
-        types = renderTypes(index);
-    return `
-        <button data-id="card" type="button" class="template_box ${detailsDataArray[index].details.types[0].type.name}" onclick="openDialog(${index})"> 
-            <h2>#${detailsDataArray[index].details.id} ${detailsDataArray[index].details.name.toUpperCase()}</h2>
-                <img data-id="card-image" loading="lazy" class="zoom img" src ="${detailsDataArray[index].details.sprites.front_default}"/> 
-                <img id="dialog-image" src ="./img/pokeLogo.png">
-            ${types} 
-        </button>`
-}
 
-// looping through the dataArray to return the templates for each pokemon
 async function renderPokemons(detailsDataArray){ 
+    let types;
     document.getElementById('pokemonList').innerHTML = "";
         for (let index = 0; index < detailsDataArray.length; index++) {
-            document.getElementById('pokemonList').innerHTML += getTemplate(index);   
+            types = renderTypes(index);
+            document.getElementById('pokemonList').innerHTML += getTemplate(index, types);   
         }
 }
 
@@ -118,6 +108,7 @@ function openDialog(index){
     dialogRef.showModal();
     renderDialogCard(index)
 }
+
 function openErrorDialog(pokemonText){
     eDialogRef.showModal();
     renderErrorDialog(pokemonText);
@@ -133,7 +124,7 @@ function renderErrorDialog(pokemonText){
 }
 
 function closeErrorDialog(){
-eDialogRef.close();
+    eDialogRef.close();
 }
 
 function bubblingPrevention(event){
@@ -171,9 +162,9 @@ function renderProgress(index){
 function renderTypes(index){
     let types = ""; 
         for (let typeIndex = 0; typeIndex < detailsDataArray[index].details.types.length; typeIndex++) { 
-                types += `<div class="type-name">${detailsDataArray[index].details.types[typeIndex].type.name}</div>`
+                 types += `<div class="type-name">${detailsDataArray[index].details.types[typeIndex].type.name}</div>`
             }
-            return types
+        return types
 }
 
 function renderEvoCard(index){
@@ -191,14 +182,14 @@ async function findPokemon(evo, evolvesTo){
     let varForFetch;
     let imgOutput ="";
     for ( let indexLoop = 0; evolvesTo.evolves_to.length >= 0; indexLoop++){  
-        varForFetch = await fetchNewGenPokemon(evolvesTo);          
-        evoImgFetch =  await fetchToGetSprites(varForFetch);
-        imgOutput = evoImgFetch.sprites.front_default;
-        evo.innerHTML += getEvoTemplate(evolvesTo, imgOutput);
+            varForFetch = await fetchNewGenPokemon(evolvesTo);          
+            evoImgFetch =  await fetchToGetSprites(varForFetch);
+            imgOutput = evoImgFetch.sprites.front_default;
+            evo.innerHTML += getEvoTemplate(evolvesTo, imgOutput);
         if (evolvesTo.evolves_to.length == 0){
                 break; 
             }
-        evolvesTo = evolvesTo.evolves_to[0];
+            evolvesTo = evolvesTo.evolves_to[0];
     } 
     return
 }
@@ -208,7 +199,7 @@ async function fetchNewGenPokemon(evolvesTo){
     try{
         response = await fetch(evolvesTo.species.url);    
     } catch (error){
-    console.log(error);
+        console.log(error);
     }
     let singleResponseAsJson = await response.json();
 
@@ -227,27 +218,27 @@ async function fetchToGetSprites(varForFetch){
 }
 
 function slideImg(direction, index){
-if (direction == 'left') {
-    decreaseIndex(index);
-} else if (direction == 'right') {
-    increaseIndex(index);
-}
+    if (direction == 'left') {
+        decreaseIndex(index);
+    } else if (direction == 'right') {
+        increaseIndex(index);
+    }
 }
 
 function increaseIndex(index){
-index++;
-if(index == detailsDataArray.length){
+    index++;
+    if(index == detailsDataArray.length){
     index = 0;
-}
-renderDialogCard(index);
+    }
+    renderDialogCard(index);
 }
 
 function decreaseIndex(index){
-index--;
-if(index < 0){
-    index = detailsDataArray.length-1;
-}
-renderDialogCard(index);
+    index--;
+    if(index < 0){
+        index = detailsDataArray.length-1;
+    }
+    renderDialogCard(index);
 }
 
 function closeDialog(){
@@ -261,7 +252,7 @@ async function loadMore(){
 }
 
 function showInput(){
-let domOutput = "";
+    let domOutput = "";
     pokemonText = document.getElementById('pokemonText').value;
     if(pokemonText.length >= 3){
         document.getElementById('pokemonList').innerHTML = "";
@@ -275,12 +266,12 @@ let domOutput = "";
 }   
 
 function loopForTemplate(domOutput){
-for(let index = 0; index < detailsDataArray.length; index++){
-        if(detailsDataArray[index].details.name.includes(pokemonText)){
-            domOutput = index;
-            document.getElementById('main_div').style.height = "100vh";
-            document.getElementById('pokemonList').innerHTML += getTemplate(index);
-        } 
+    for(let index = 0; index < detailsDataArray.length; index++){
+            if(detailsDataArray[index].details.name.includes(pokemonText)){
+                domOutput = index;
+                document.getElementById('main_div').style.height = "100vh";
+                document.getElementById('pokemonList').innerHTML += getTemplate(index);
+            } 
     }
     if(domOutput == ""){
         clearInputAndDialog(pokemonText);
@@ -305,22 +296,19 @@ function loaderFunction(){
 
 function showLoaderStart(){
     document.getElementById("loader").style.display = "none";
-    document.getElementById("pokemonList").style.display = "flex";
 }
 
 function showMoreLoader(){
-    document.getElementById("pokemonList").style.display = "none";
     document.getElementById("loader").style.display = "flex";
     document.getElementById("loadBtn").style.display = "none";
-    load = setTimeout(loaderNone, 1000);
+    load = setTimeout(loaderNone, 4000);
 }
 
 async function loaderNone(){
-    document.getElementById("loader").style.display = "none";
-    document.getElementById("pokemonList").style.display = "flex";
-    document.getElementById("loadBtn").style.display ="flex";
+        document.getElementById("loadBtn").style.display ="flex";
+        document.getElementById("loader").style.display = "none";
     await getPokemons(POKE_API_OFFSET);
-    document.getElementById("pokemonList").style.pointerEvents = "";
+        document.getElementById("pokemonList").style.pointerEvents = "";
 }
 
 function refreshSite(){
