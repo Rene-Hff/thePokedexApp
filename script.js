@@ -301,6 +301,7 @@ function showLoaderStart(){
 function showMoreLoader(){
     document.getElementById("loader").style.display = "flex";
     document.getElementById("loadBtn").style.display = "none";
+     document.getElementById("pokemonList").style.pointerEvents = "none";
     load = setTimeout(loaderNone, 4000);
 }
 
@@ -309,6 +310,7 @@ async function loaderNone(){
         document.getElementById("loader").style.display = "none";
     await getPokemons(POKE_API_OFFSET);
         document.getElementById("pokemonList").style.pointerEvents = "";
+        document.getElementById("pokemonList").scrollIntoView({block: "nearest"});
 }
 
 function refreshSite(){
