@@ -1,15 +1,16 @@
 const POKE_API_URL = "https://pokeapi.co/api/v2/pokemon" 
 const speciesURl   = "https://pokeapi.co/api/v2/pokemon-species";
 const detailsDataArray = []; 
-const evoChainDataArray = [];
+let specArray = [];
 let POKE_API_OFFSET = 0;
 const POKE_API_LIMIT = 30;
 const dialogRef = document.getElementById('cardDialog');
 const eDialogRef = document.getElementById('errorDialog');
 let pokemonText;
 let load;
+let evoChainDataArray = [];
 
-//fetching the poke-api to get data and pushing the url in an array
+
 async function getPokemons(POKE_API_OFFSET){ 
     let response;
     let dataArray = [];
@@ -28,7 +29,7 @@ async function getPokemons(POKE_API_OFFSET){
     fetchUrl(dataArray);
 }
 
-// fetching the dataArray to get the details of each pokemon
+
 async function fetchUrl(dataArray){ 
     let response;
         for (let index = 0; index < dataArray.length; index++) {        
@@ -45,8 +46,7 @@ async function fetchUrl(dataArray){
     renderPokemons(detailsDataArray);
 }
 
-async function fetchSpecies(){
-    let specArray = []; 
+async function fetchSpecies(){  
             try{
                 response = await fetch(speciesURl + `?limit=${POKE_API_LIMIT}&offset=${POKE_API_OFFSET}`); 
             } catch(error) {
@@ -57,13 +57,12 @@ async function fetchSpecies(){
                 specArray.push({
                     speciesUrl : responseAsJson.results[index].url
                 })
-            }
-    fetchForEvolutionStats(specArray);
+            } 
  }
 
 async function fetchForEvolutionStats(specArray){ 
+    const evoChainArray =[];
     let response;
-    const evoChainArray =[]; 
     for (let index = 0; index < specArray.length; index++) {
         try{
             response = await fetch(specArray[index].speciesUrl);  
@@ -75,11 +74,12 @@ async function fetchForEvolutionStats(specArray){
         evoKey : responseAsJson     
         })
     }
-    fetchForEvoChainData(evoChainArray);
+  await fetchForEvoChainData(evoChainArray);
 }
 
 
 async function fetchForEvoChainData(evoChainArray){
+    evoChainDataArray = [];
     let response;
     for (let index = 0; index < evoChainArray.length; index++) {
             try{
@@ -143,7 +143,7 @@ function renderDialogCard(index){
         renderInfo(index);
 }
 
-function renderInfo(index){
+async function renderInfo(index){
     let info = document.getElementById('infoCard');
         document.getElementById('progressCard').style = "display: none";
         document.getElementById('evoCard').style = "display: none";
@@ -167,7 +167,8 @@ function renderTypes(index){
         return types
 }
 
-function renderEvoCard(index){
+async function renderEvoCard(index){
+    await fetchForEvolutionStats(specArray);
     let evo = document.getElementById('evoCard');
     document.getElementById('infoCard').style = "display: none";
     document.getElementById('progressCard').style = "display: none";
