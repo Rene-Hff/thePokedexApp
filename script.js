@@ -21,8 +21,7 @@ async function getPokemons(POKE_API_OFFSET){
         }
         let responseAsJson = await response.json();
         for (index = 0; index < Object.keys(responseAsJson.results).length; index++) { 
-                dataArray.push(
-            {
+                dataArray.push({
             url : responseAsJson.results[index].url
             })
         }
@@ -60,10 +59,9 @@ async function fetchSpecies(){
             } 
  }
 
-async function fetchForEvolutionStats(specArray){ 
+async function fetchForEvolutionStats(index){ 
     const evoChainArray =[];
     let response;
-    for (let index = 0; index < specArray.length; index++) {
         try{
             response = await fetch(specArray[index].speciesUrl);  
         }   catch(error){
@@ -73,8 +71,7 @@ async function fetchForEvolutionStats(specArray){
         evoChainArray.push({
         evoKey : responseAsJson     
         })
-    }
-  await fetchForEvoChainData(evoChainArray);
+    await fetchForEvoChainData(evoChainArray);
 }
 
 
@@ -168,13 +165,13 @@ function renderTypes(index){
 }
 
 async function renderEvoCard(index){
-    await fetchForEvolutionStats(specArray);
+    await fetchForEvolutionStats(index);
     let evo = document.getElementById('evoCard');
     document.getElementById('infoCard').style = "display: none";
     document.getElementById('progressCard').style = "display: none";
     document.getElementById('evoCard').style = "";
     evo.innerHTML = ``;
-    let evolvesTo = evoChainDataArray[index].chainKey.chain;
+    let evolvesTo = evoChainDataArray[0].chainKey.chain;
     findPokemon(evo, evolvesTo);
 }
 
@@ -191,12 +188,10 @@ async function findPokemon(evo, evolvesTo){
                 break; 
             }
             evolvesTo = evolvesTo.evolves_to[0];
-    } 
-    return
+    }    return
 }
 
 async function fetchNewGenPokemon(evolvesTo){
-    let singleResponse = await fetch(evolvesTo.species.url);
     try{
         response = await fetch(evolvesTo.species.url);    
     } catch (error){
@@ -208,13 +203,13 @@ async function fetchNewGenPokemon(evolvesTo){
 }
 
 async function fetchToGetSprites(varForFetch){
-    let singleResponse = await fetch(varForFetch);
         try{
           response = await fetch(varForFetch);
         } catch (error){
         console.log(error);
         }
     let singleResponseAsJson = await response.json();
+
     return singleResponseAsJson;
 }
 
@@ -303,6 +298,7 @@ function showMoreLoader(){
     document.getElementById("loader").style.display = "flex";
     document.getElementById("loadBtn").style.display = "none";
      document.getElementById("pokemonList").style.pointerEvents = "none";
+    document.getElementById("pokemonList").style.opacity = "0.33";
     load = setTimeout(loaderNone, 4000);
 }
 
@@ -311,6 +307,7 @@ async function loaderNone(){
         document.getElementById("loader").style.display = "none";
     await getPokemons(POKE_API_OFFSET);
         document.getElementById("pokemonList").style.pointerEvents = "";
+        document.getElementById("pokemonList").style.opacity = "";
         document.getElementById("pokemonList").scrollIntoView({block: "nearest"});
 }
 
