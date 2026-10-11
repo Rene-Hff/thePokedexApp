@@ -1,6 +1,6 @@
 const POKE_API_URL = "https://pokeapi.co/api/v2/pokemon" 
 const speciesURl   = "https://pokeapi.co/api/v2/pokemon-species";
-const detailsDataArray = []; 
+let detailsDataArray = []; 
 let specArray = [];
 let POKE_API_OFFSET = 0;
 const POKE_API_LIMIT = 30;
@@ -8,12 +8,12 @@ const dialogRef = document.getElementById('cardDialog');
 const eDialogRef = document.getElementById('errorDialog');
 let pokemonText;
 let load;
+let evoChainArray =[];
 let evoChainDataArray = [];
-
+let dataArray = [];
 
 async function getPokemons(POKE_API_OFFSET){ 
     let response;
-    let dataArray = [];
         try{
             response = await fetch(POKE_API_URL + `?limit=${POKE_API_LIMIT}&offset=${POKE_API_OFFSET}`);
         } catch (error){
@@ -25,11 +25,13 @@ async function getPokemons(POKE_API_OFFSET){
             url : responseAsJson.results[index].url
             })
         }
+    console.log(dataArray);
     fetchUrl(dataArray);
 }
 
 
 async function fetchUrl(dataArray){ 
+    detailsDataArray = [];
     let response;
         for (let index = 0; index < dataArray.length; index++) {        
             try{
@@ -60,7 +62,7 @@ async function fetchSpecies(){
  }
 
 async function fetchForEvolutionStats(index){ 
-    const evoChainArray =[];
+    evoChainArray = [];
     let response;
         try{
             response = await fetch(specArray[index].speciesUrl);  
@@ -71,6 +73,7 @@ async function fetchForEvolutionStats(index){
         evoChainArray.push({
         evoKey : responseAsJson     
         })
+    console.log(evoChainArray);
     await fetchForEvoChainData(evoChainArray);
 }
 
@@ -89,6 +92,7 @@ async function fetchForEvoChainData(evoChainArray){
         chainKey: responseAsJson
         })
     }
+    console.log(evoChainDataArray);
 }
 
 
@@ -171,24 +175,31 @@ async function renderEvoCard(index){
     document.getElementById('progressCard').style = "display: none";
     document.getElementById('evoCard').style = "";
     evo.innerHTML = ``;
-    let evolvesTo = evoChainDataArray[0].chainKey.chain;
-    findPokemon(evo, evolvesTo);
+    let evolvesTo = evoChainDataArray[0].chainKey.chain; 
+    findPokemon(evo, evolvesTo, index);
 }
 
-async function findPokemon(evo, evolvesTo){
+async function findPokemon(evo, evolvesTo, index){
     let evoImgFetch = "";
-    let varForFetch;
-    let imgOutput ="";
-    for ( let indexLoop = 0; evolvesTo.evolves_to.length >= 0; indexLoop++){  
-            varForFetch = await fetchNewGenPokemon(evolvesTo);          
-            evoImgFetch =  await fetchToGetSprites(varForFetch);
-            imgOutput = evoImgFetch.sprites.front_default;
-            evo.innerHTML += getEvoTemplate(evolvesTo, imgOutput);
+    let imgOutput = "";
+    let varForFetch = "";
+    let newGenSpecs = evoChainDataArray[0].chainKey.chain.species.name;
+        if(detailsDataArray[index].details.name != newGenSpecs && evoChainDataArray[0].chainKey.chain.is_baby == true){
+                    varForFetch = await fetchNewGenPokemon(evolvesTo);
+                    evoImgFetch = await fetchToGetSprites(varForFetch);
+                    imgOutput = evoImgFetch.sprites.front_default;
+                    evo.innerHTML += getEvoTemplate(evolvesTo, imgOutput);
+                    evolvesTo = evolvesTo.evolves_to[0];
+        }
+        for ( let indexLoop = 0; evolvesTo.evolves_to.length >= 0; indexLoop++){
+                    //-- here a function to render the template in the right order
+                    imgOutput = detailsDataArray[index].details.sprites.front_default;
+                    evo.innerHTML += getEvoTemplate(evolvesTo, imgOutput);
         if (evolvesTo.evolves_to.length == 0){
                 break; 
             }
-            evolvesTo = evolvesTo.evolves_to[0];
-    }    return
+            evolvesTo = evolvesTo.evolves_to[0];    
+    }   return
 }
 
 async function fetchNewGenPokemon(evolvesTo){
