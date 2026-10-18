@@ -11,6 +11,10 @@ let load;
 let evoChainArray =[];
 let evoChainDataArray = [];
 let dataArray = [];
+let evoImgFetch = "";
+let imgOutput = "";
+let varForFetch = "";
+
 
 async function getPokemons(POKE_API_OFFSET){ 
     let response;
@@ -25,7 +29,6 @@ async function getPokemons(POKE_API_OFFSET){
             url : responseAsJson.results[index].url
             })
         }
-    console.log(dataArray);
     fetchUrl(dataArray);
 }
 
@@ -46,6 +49,7 @@ async function fetchUrl(dataArray){
    }
     renderPokemons(detailsDataArray);
 }
+
 
 async function fetchSpecies(){  
             try{
@@ -73,7 +77,6 @@ async function fetchForEvolutionStats(index){
         evoChainArray.push({
         evoKey : responseAsJson     
         })
-    console.log(evoChainArray);
     await fetchForEvoChainData(evoChainArray);
 }
 
@@ -92,7 +95,6 @@ async function fetchForEvoChainData(evoChainArray){
         chainKey: responseAsJson
         })
     }
-    console.log(evoChainDataArray);
 }
 
 
@@ -168,6 +170,7 @@ function renderTypes(index){
         return types
 }
 
+
 async function renderEvoCard(index){
     await fetchForEvolutionStats(index);
     let evo = document.getElementById('evoCard');
@@ -179,27 +182,37 @@ async function renderEvoCard(index){
     findPokemon(evo, evolvesTo, index);
 }
 
+
 async function findPokemon(evo, evolvesTo, index){
-    let evoImgFetch = "";
-    let imgOutput = "";
-    let varForFetch = "";
     let firstNameOfChain = evoChainDataArray[0].chainKey.chain.species.name;
     let specUrl = evoChainDataArray[0].chainKey.chain.species.url;
     let indexArrayForUrl =  specUrl.split("/");
     let indexForUrl = indexArrayForUrl[6];
         indexForUrl--;
-        if(detailsDataArray[index].details.name != firstNameOfChain && evoChainDataArray[0].chainKey.chain.is_baby == true){
-                    varForFetch = await fetchNewGenPokemon(evolvesTo);
-                    evoImgFetch = await fetchToGetSprites(varForFetch);
-                    imgOutput = evoImgFetch.sprites.front_default;
-                    evo.innerHTML += getEvoTemplate(evolvesTo, imgOutput);
-                    evolvesTo = evolvesTo.evolves_to[0];
-                    specUrl = evoChainDataArray[0].chainKey.chain.evolves_to[0].species.url;
-                    indexArrayForUrl =  specUrl.split("/");
-                    indexForUrl = indexArrayForUrl[6];
-                    indexForUrl--;
+        await checkForNewGenPokemon(index, firstNameOfChain, evolvesTo, evo, indexArrayForUrl, indexForUrl); 
+    return
+}
+
+
+async function checkForNewGenPokemon(index,firstNameOfChain, evolvesTo, evo, indexArrayForUrl, indexForUrl){
+    if(detailsDataArray[index].details.name != firstNameOfChain && evoChainDataArray[0].chainKey.chain.is_baby == true){
+            varForFetch = await fetchNewGenPokemon(evolvesTo);
+            evoImgFetch = await fetchToGetSprites(varForFetch);
+            imgOutput = evoImgFetch.sprites.front_default;
+            evo.innerHTML += getEvoTemplate(evolvesTo, imgOutput);
+            evolvesTo = evolvesTo.evolves_to[0];
+            specUrl = evoChainDataArray[0].chainKey.chain.evolves_to[0].species.url;
+            indexArrayForUrl =  specUrl.split("/");
+            indexForUrl = indexArrayForUrl[6];
+            indexForUrl--;
         }
-        for (let indexLoop = 0; evolvesTo.evolves_to.length >= 0; indexLoop++){
+        await loopEvoTemplate(evolvesTo, imgOutput, indexForUrl, evo);
+    return
+}
+
+
+async function loopEvoTemplate(evolvesTo, imgOutput, indexForUrl, evo){
+    for (let indexLoop = 0; evolvesTo.evolves_to.length >= 0; indexLoop++){
                     imgOutput = detailsDataArray[indexForUrl].details.sprites.front_default;
                     evo.innerHTML += getEvoTemplate(evolvesTo, imgOutput);
         if (evolvesTo.evolves_to.length == 0){
@@ -207,8 +220,9 @@ async function findPokemon(evo, evolvesTo, index){
             }
             evolvesTo = evolvesTo.evolves_to[0];
             indexForUrl++;
-        }   return
+        }
 }
+
 
 async function fetchNewGenPokemon(evolvesTo){
     try{
