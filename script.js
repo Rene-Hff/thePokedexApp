@@ -183,23 +183,31 @@ async function findPokemon(evo, evolvesTo, index){
     let evoImgFetch = "";
     let imgOutput = "";
     let varForFetch = "";
-    let newGenSpecs = evoChainDataArray[0].chainKey.chain.species.name;
-        if(detailsDataArray[index].details.name != newGenSpecs && evoChainDataArray[0].chainKey.chain.is_baby == true){
+    let firstNameOfChain = evoChainDataArray[0].chainKey.chain.species.name;
+    let specUrl = evoChainDataArray[0].chainKey.chain.species.url;
+    let indexArrayForUrl =  specUrl.split("/");
+    let indexForUrl = indexArrayForUrl[6];
+        indexForUrl--;
+        if(detailsDataArray[index].details.name != firstNameOfChain && evoChainDataArray[0].chainKey.chain.is_baby == true){
                     varForFetch = await fetchNewGenPokemon(evolvesTo);
                     evoImgFetch = await fetchToGetSprites(varForFetch);
                     imgOutput = evoImgFetch.sprites.front_default;
                     evo.innerHTML += getEvoTemplate(evolvesTo, imgOutput);
                     evolvesTo = evolvesTo.evolves_to[0];
+                    specUrl = evoChainDataArray[0].chainKey.chain.evolves_to[0].species.url;
+                    indexArrayForUrl =  specUrl.split("/");
+                    indexForUrl = indexArrayForUrl[6];
+                    indexForUrl--;
         }
-        for ( let indexLoop = 0; evolvesTo.evolves_to.length >= 0; indexLoop++){
-                    //-- here a function to render the template in the right order
-                    imgOutput = detailsDataArray[index].details.sprites.front_default;
+        for (let indexLoop = 0; evolvesTo.evolves_to.length >= 0; indexLoop++){
+                    imgOutput = detailsDataArray[indexForUrl].details.sprites.front_default;
                     evo.innerHTML += getEvoTemplate(evolvesTo, imgOutput);
         if (evolvesTo.evolves_to.length == 0){
                 break; 
             }
-            evolvesTo = evolvesTo.evolves_to[0];    
-    }   return
+            evolvesTo = evolvesTo.evolves_to[0];
+            indexForUrl++;
+        }   return
 }
 
 async function fetchNewGenPokemon(evolvesTo){
