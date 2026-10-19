@@ -3,7 +3,7 @@ const speciesURl   = "https://pokeapi.co/api/v2/pokemon-species";
 let detailsDataArray = []; 
 let specArray = [];
 let POKE_API_OFFSET = 0;
-const POKE_API_LIMIT = 30;
+const POKE_API_LIMIT = 20;
 const dialogRef = document.getElementById('cardDialog');
 const eDialogRef = document.getElementById('errorDialog');
 let pokemonText;
@@ -17,13 +17,14 @@ let varForFetch = "";
 
 
 async function getPokemons(POKE_API_OFFSET){ 
+    dataArray = [];
     let response;
         try{
             response = await fetch(POKE_API_URL + `?limit=${POKE_API_LIMIT}&offset=${POKE_API_OFFSET}`);
         } catch (error){
             console.log(error);
         }
-        let responseAsJson = await response.json();
+    let responseAsJson = await response.json();
         for (index = 0; index < Object.keys(responseAsJson.results).length; index++) { 
                 dataArray.push({
             url : responseAsJson.results[index].url
@@ -34,7 +35,6 @@ async function getPokemons(POKE_API_OFFSET){
 
 
 async function fetchUrl(dataArray){ 
-    detailsDataArray = [];
     let response;
         for (let index = 0; index < dataArray.length; index++) {        
             try{
@@ -42,9 +42,9 @@ async function fetchUrl(dataArray){
             }   catch(error){
                 console.log(error);
             }
-        let responseAsJson = await response.json();
-                detailsDataArray.push({
-                details : responseAsJson
+    let responseAsJson = await response.json();
+            detailsDataArray.push({
+            details : responseAsJson
         })
    }
     renderPokemons(detailsDataArray);
@@ -52,12 +52,12 @@ async function fetchUrl(dataArray){
 
 
 async function fetchSpecies(){  
-            try{
-                response = await fetch(speciesURl + `?limit=${POKE_API_LIMIT}&offset=${POKE_API_OFFSET}`); 
-            } catch(error) {
-                console.log(error);
-            }
-        let responseAsJson = await response.json();
+    try{
+        response = await fetch(speciesURl + `?limit=${POKE_API_LIMIT}&offset=${POKE_API_OFFSET}`); 
+    } catch(error) {
+        console.log(error);
+    }
+    let responseAsJson = await response.json();
             for (let index = 0; index < responseAsJson.results.length; index++) {
                 specArray.push({
                     speciesUrl : responseAsJson.results[index].url
@@ -275,7 +275,7 @@ function closeDialog(){
 }
 
 async function loadMore(){
-    POKE_API_OFFSET+=30;
+    POKE_API_OFFSET+=20;
     fetchSpecies();
     showMoreLoader();  
 }
