@@ -298,7 +298,6 @@ function loopForTemplate(domOutput){
     for(let index = 0; index < detailsDataArray.length; index++){
             if(detailsDataArray[index].details.name.includes(pokemonText)){
                 domOutput = index;
-                document.getElementById('main_div').style.height = "100vh";
                 document.getElementById('pokemonList').innerHTML += getTemplate(index);
             } 
     }

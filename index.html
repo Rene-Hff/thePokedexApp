@@ -13,14 +13,16 @@
 </head>
 <body onload="init()">
  <header>
-    <button id="homeBtn" onclick="refreshSite()"><img id="headerLogo" src="./img/pokeLogo.png"></button>
-    <h1>The Pokédex</h1>
-    <search>
-        <form action="./search/" method="dialog">
-                <input type="search" id="pokemonText" placeholder=" search for a Pokémon "/>
-                <button onclick="showInput()" id="searchBtn">search</button>
-        </form>
-    </search>
+    <div class="headerDiv">
+        <button id="homeBtn" onclick="refreshSite()"><img id="headerLogo" src="./img/pokeLogo.png"></button>
+        <h1>The Pokédex</h1>
+        <search>
+            <form action="./search/" method="dialog">
+                    <input type="search" id="pokemonText" placeholder=" search for a Pokémon "/>
+                    <button onclick="showInput()" id="searchBtn">search</button>
+            </form>
+        </search>
+    </div>
  </header>
  <main data-id="content">
     <div id="main_div">
