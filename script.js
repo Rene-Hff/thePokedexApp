@@ -11,9 +11,11 @@ let load;
 let evoChainArray =[];
 let evoChainDataArray = [];
 let dataArray = [];
+let evoCache = [];
 let evoImgFetch = "";
 let imgOutput = "";
 let varForFetch = "";
+
 
 
 async function getPokemons(POKE_API_OFFSET){ 
@@ -139,7 +141,7 @@ function renderDialogCard(index){
     let btnDiv = document.getElementById('buttonsDiv');
     let info = document.getElementById('infoCard');
     let navigations = document.getElementById('slideButtons');
-        diaCont.innerHTML = getTemplate(index);
+        diaCont.innerHTML = getTemplate(index, renderTypes(index));
         btnDiv.innerHTML = renderDialogBtns(index);
         info.innerHTML = renderInfoTemplate(index);
         navigations.innerHTML = renderNaviBtns(index);
@@ -172,14 +174,45 @@ function renderTypes(index){
 
 
 async function renderEvoCard(index){
-    await fetchForEvolutionStats(index);
-    let evo = document.getElementById('evoCard');
-    document.getElementById('infoCard').style = "display: none";
-    document.getElementById('progressCard').style = "display: none";
-    document.getElementById('evoCard').style = "";
-    evo.innerHTML = ``;
-    let evolvesTo = evoChainDataArray[0].chainKey.chain; 
-    findPokemon(evo, evolvesTo, index);
+    const url = detailsDataArray[index].details.species.url;
+    if(
+        evoCache.some(item => {
+            if(item.species.url === url){
+                console.log("passt bei 1")
+            return true
+            }
+            else if(item.evolves_to[0].species.url === url){
+                console.log("passt bei 2")
+            return true
+            } 
+            else if(item.evolves_to[0].evolves_to[0].species.url === url){
+                console.log("passt bei 3")
+            return true
+            }
+            return false
+        })
+    ){ 
+        let evo = document.getElementById('evoCard');
+        document.getElementById('infoCard').style = "display: none";
+        document.getElementById('progressCard').style = "display: none";
+        document.getElementById('evoCard').style = "";
+        evo.innerHTML = ``;
+        let evolvesTo = evoChainDataArray[0].chainKey.chain;
+        findPokemon(evo, evolvesTo, index);
+        console.log(evoCache);
+    }
+    else{       
+        await fetchForEvolutionStats(index);
+        evoCache.push(evoChainDataArray[0].chainKey.chain)
+        console.log(evoCache);
+        let evo = document.getElementById('evoCard');
+        document.getElementById('infoCard').style = "display: none";
+        document.getElementById('progressCard').style = "display: none";
+        document.getElementById('evoCard').style = "";
+        evo.innerHTML = ``;
+        let evolvesTo = evoChainDataArray[0].chainKey.chain;
+        findPokemon(evo, evolvesTo, index);
+    }
 }
 
 
@@ -194,7 +227,7 @@ async function findPokemon(evo, evolvesTo, index){
 }
 
 
-async function checkForNewGenPokemon(index,firstNameOfChain, evolvesTo, evo, indexArrayForUrl, indexForUrl){
+async function checkForNewGenPokemon(index, firstNameOfChain, evolvesTo, evo, indexArrayForUrl, indexForUrl){
     if(detailsDataArray[index].details.name != firstNameOfChain && evoChainDataArray[0].chainKey.chain.is_baby == true){
             varForFetch = await fetchNewGenPokemon(evolvesTo);
             evoImgFetch = await fetchToGetSprites(varForFetch);
@@ -291,14 +324,13 @@ function showInput(){
             clearInputAndDialog(pokemonText);
     } 
     document.getElementById('pokemonText').value = "";
-    document.getElementById('slideButtons').style.display = "none";
 }   
 
 function loopForTemplate(domOutput){
     for(let index = 0; index < detailsDataArray.length; index++){
             if(detailsDataArray[index].details.name.includes(pokemonText)){
                 domOutput = index;
-                document.getElementById('pokemonList').innerHTML += getTemplate(index);
+                document.getElementById('pokemonList').innerHTML += getTemplate(index, renderTypes(index));
             } 
     }
     if(domOutput == ""){

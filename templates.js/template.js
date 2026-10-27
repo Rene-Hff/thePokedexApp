@@ -1,5 +1,4 @@
-function getTemplate(index){
-    let types =  renderTypes(index);
+function getTemplate(index, types){
     return `
         <button data-id="card" type="button" class="template_box ${detailsDataArray[index].details.types[0].type.name}" onclick="openDialog(${index})"> 
             <h2>#${detailsDataArray[index].details.id} ${detailsDataArray[index].details.name.toUpperCase()}</h2>
