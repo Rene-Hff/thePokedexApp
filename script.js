@@ -175,46 +175,40 @@ function renderTypes(index){
 
 async function renderEvoCard(index){
     const url = detailsDataArray[index].details.species.url;
-    if(
-        evoCache.some(item => {
-            if(item.species.url === url){
-                console.log("passt bei 1")
-            return true
-            }
-            else if(item.evolves_to[0].species.url === url){
-                console.log("passt bei 2")
-            return true
-            } 
-            else if(item.evolves_to[0].evolves_to[0].species.url === url){
-                console.log("passt bei 3")
-            return true
-            }
-            return false
-        })
-    ){ 
-        let evo = document.getElementById('evoCard');
-        document.getElementById('infoCard').style = "display: none";
-        document.getElementById('progressCard').style = "display: none";
-        document.getElementById('evoCard').style = "";
-        evo.innerHTML = ``;
-        let evolvesTo = evoChainDataArray[0].chainKey.chain;
-        findPokemon(evo, evolvesTo, index);
-        console.log(evoCache);
+    if(evoCache.some(item => 
+         checkForUrl(item, url)
+        ) == true){ 
+        renderEvoCardContent(index);
     }
     else{       
         await fetchForEvolutionStats(index);
         evoCache.push(evoChainDataArray[0].chainKey.chain)
-        console.log(evoCache);
-        let evo = document.getElementById('evoCard');
+        renderEvoCardContent(index);
+    }
+}
+
+function checkForUrl(item, url){
+            if(item.species.url === url){
+            return true
+            }
+            else if(item.evolves_to[0].species.url === url){
+            return true
+            } 
+            else if(item.evolves_to[0].evolves_to[0].species.url === url){
+            return true
+            }
+            return false
+}
+
+function renderEvoCardContent(index){
+    let evo = document.getElementById('evoCard');
         document.getElementById('infoCard').style = "display: none";
         document.getElementById('progressCard').style = "display: none";
         document.getElementById('evoCard').style = "";
         evo.innerHTML = ``;
         let evolvesTo = evoChainDataArray[0].chainKey.chain;
         findPokemon(evo, evolvesTo, index);
-    }
 }
-
 
 async function findPokemon(evo, evolvesTo, index){
     let firstNameOfChain = evoChainDataArray[0].chainKey.chain.species.name;
