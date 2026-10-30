@@ -176,10 +176,7 @@ function renderTypes(index){
 async function renderEvoCard(index){
     const url = detailsDataArray[index].details.species.url;
     let urlCheck = evoCache.some(item =>  checkForUrl(item, url));
-    if(urlCheck == true){
-        // empty because rendering after if-statement
-    }
-    else{       
+    if(!urlCheck == true){
         await fetchForEvolutionStats(index);
         evoCache.push(evoChainDataArray[0].chainKey.chain)
     }
