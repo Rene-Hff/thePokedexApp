@@ -175,16 +175,15 @@ function renderTypes(index){
 
 async function renderEvoCard(index){
     const url = detailsDataArray[index].details.species.url;
-    if(evoCache.some(item => 
-         checkForUrl(item, url)
-        ) == true){ 
-        renderEvoCardContent(index);
+    let urlCheck = evoCache.some(item =>  checkForUrl(item, url));
+    if(urlCheck == true){
+        // empty because rendering after if-statement
     }
     else{       
         await fetchForEvolutionStats(index);
         evoCache.push(evoChainDataArray[0].chainKey.chain)
-        renderEvoCardContent(index);
     }
+    renderEvoCardContent(index);
 }
 
 function checkForUrl(item, url){
