@@ -279,18 +279,27 @@ function slideImg(direction, index){
 
 function increaseIndex(index){
     index++;
+    if(detailsDataArray[index].details.name.includes(pokemonText) || !pokemonText){
+        renderDialogCard(index);
+    } else{
+        document.getElementById("rightBtn").style.pointerEvents = "none";
+    }
     if(index == detailsDataArray.length){
     index = 0;
     }
-    renderDialogCard(index);
 }
 
 function decreaseIndex(index){
     index--;
     if(index < 0){
-        index = detailsDataArray.length-1;
+       index = 0;
+       document.getElementById("leftBtn").style.pointerEvents = "none";
     }
-    renderDialogCard(index);
+    else if(detailsDataArray[index].details.name.includes(pokemonText) || !pokemonText){
+            renderDialogCard(index);
+    } else{
+            document.getElementById("leftBtn").style.pointerEvents = "none";
+    }
 }
 
 function closeDialog(){
@@ -321,12 +330,14 @@ function loopForTemplate(domOutput){
             if(detailsDataArray[index].details.name.includes(pokemonText)){
                 domOutput = index;
                 document.getElementById('pokemonList').innerHTML += getTemplate(index, renderTypes(index));
+                document.getElementById("loadBtn").style.display = "none";
+                document.getElementById("backBtn").style.display = "flex";
             } 
-    }
-    if(domOutput == ""){
-        clearInputAndDialog(pokemonText);
-        renderPokemons(detailsDataArray);
-    }
+        }
+        if(domOutput === ""){
+            clearInputAndDialog(pokemonText);
+            renderPokemons(detailsDataArray);
+        }
 }
 
 function clearInputAndDialog(pokemonText){
@@ -353,7 +364,7 @@ function showMoreLoader(){
     document.getElementById("loadBtn").style.display = "none";
      document.getElementById("pokemonList").style.pointerEvents = "none";
     document.getElementById("pokemonList").style.opacity = "0.33";
-    load = setTimeout(loaderNone, 4000);
+    load = setTimeout(loaderNone, 4500);
 }
 
 async function loaderNone(){
@@ -368,5 +379,7 @@ async function loaderNone(){
 function refreshSite(){
     document.getElementById('main_div').style.height = "auto";
     document.getElementById('slideButtons').style.display = "flex";
+     document.getElementById("loadBtn").style.display = "flex";
+    document.getElementById("backBtn").style.display = "none";
     renderPokemons(detailsDataArray);
 }
