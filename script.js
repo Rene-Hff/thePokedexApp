@@ -298,7 +298,7 @@ function decreaseIndex(index){
     else if(detailsDataArray[index].details.name.includes(pokemonText) || !pokemonText){
             renderDialogCard(index);
     } else{
-            document.getElementById("leftBtn").style.pointerEvents = "none";
+        document.getElementById("leftBtn").style.pointerEvents = "none";
     }
 }
 
